@@ -1,0 +1,17 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_photo_edit_emoji_rl"
+    android:layout_width="match_parent"
+    android:padding="12dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/fragment_photo_edit_emoji_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="4dp"
+        android:padding="2dp"
+        android:textColor="#FFFFFF"
+        android:textSize="35sp" />
+
+</RelativeLayout>
