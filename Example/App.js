@@ -40,7 +40,22 @@ export default class App extends Component<Props> {
 
     RNPhotoEditor.Edit({
       path: RNFS.DocumentDirectoryPath + "/photo.jpg",
-    })
+      stickers: [
+        "sticker0",
+        "sticker1",
+        "sticker2",
+        "sticker3",
+        "sticker4",
+        "sticker5",
+        "sticker6",
+        "sticker7",
+        'sticker8', 
+        'sticker9', 
+        'sticker10'
+      ],
+      hiddenControls: undefined,
+      colors: undefined
+    });
   }
 
   componentDidMount() {

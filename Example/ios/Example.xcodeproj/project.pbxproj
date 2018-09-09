@@ -43,6 +43,17 @@
 		CE47A89721329DF3006B1884 /* iOSPhotoEditor.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CE47A89321329DEC006B1884 /* iOSPhotoEditor.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CE47A89B21329DFC006B1884 /* libRNPhotoEditor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE47A88B21329D62006B1884 /* libRNPhotoEditor.a */; };
 		CEA2B0902145112C00D21235 /* PhotoEditorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B08F2145112C00D21235 /* PhotoEditorViewController.xib */; };
+		CEA2B0A221453F6600D21235 /* sticker7.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B09721453F6400D21235 /* sticker7.png */; };
+		CEA2B0A321453F6600D21235 /* sticker2.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B09821453F6400D21235 /* sticker2.png */; };
+		CEA2B0A421453F6600D21235 /* sticker0.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B09921453F6400D21235 /* sticker0.png */; };
+		CEA2B0A521453F6600D21235 /* sticker3.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B09A21453F6500D21235 /* sticker3.png */; };
+		CEA2B0A621453F6600D21235 /* sticker8.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B09B21453F6500D21235 /* sticker8.png */; };
+		CEA2B0A721453F6600D21235 /* sticker6.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B09C21453F6500D21235 /* sticker6.png */; };
+		CEA2B0A821453F6600D21235 /* sticker10.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B09D21453F6500D21235 /* sticker10.png */; };
+		CEA2B0A921453F6600D21235 /* sticker4.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B09E21453F6500D21235 /* sticker4.png */; };
+		CEA2B0AA21453F6600D21235 /* sticker9.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B09F21453F6500D21235 /* sticker9.png */; };
+		CEA2B0AB21453F6600D21235 /* sticker1.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B0A021453F6500D21235 /* sticker1.png */; };
+		CEA2B0AC21453F6600D21235 /* sticker5.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B0A121453F6500D21235 /* sticker5.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -410,6 +421,17 @@
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		CE47A88D21329DEC006B1884 /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = "../../node_modules/react-native-photo-editor/ios/Pods/Pods.xcodeproj"; sourceTree = "<group>"; };
 		CEA2B08F2145112C00D21235 /* PhotoEditorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoEditorViewController.xib; sourceTree = "<group>"; };
+		CEA2B09721453F6400D21235 /* sticker7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker7.png; sourceTree = "<group>"; };
+		CEA2B09821453F6400D21235 /* sticker2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker2.png; sourceTree = "<group>"; };
+		CEA2B09921453F6400D21235 /* sticker0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker0.png; sourceTree = "<group>"; };
+		CEA2B09A21453F6500D21235 /* sticker3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker3.png; sourceTree = "<group>"; };
+		CEA2B09B21453F6500D21235 /* sticker8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker8.png; sourceTree = "<group>"; };
+		CEA2B09C21453F6500D21235 /* sticker6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker6.png; sourceTree = "<group>"; };
+		CEA2B09D21453F6500D21235 /* sticker10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker10.png; sourceTree = "<group>"; };
+		CEA2B09E21453F6500D21235 /* sticker4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker4.png; sourceTree = "<group>"; };
+		CEA2B09F21453F6500D21235 /* sticker9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker9.png; sourceTree = "<group>"; };
+		CEA2B0A021453F6500D21235 /* sticker1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker1.png; sourceTree = "<group>"; };
+		CEA2B0A121453F6500D21235 /* sticker5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker5.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -725,6 +747,17 @@
 		CEA2B08A2145104900D21235 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CEA2B09921453F6400D21235 /* sticker0.png */,
+				CEA2B0A021453F6500D21235 /* sticker1.png */,
+				CEA2B09821453F6400D21235 /* sticker2.png */,
+				CEA2B09A21453F6500D21235 /* sticker3.png */,
+				CEA2B09E21453F6500D21235 /* sticker4.png */,
+				CEA2B0A121453F6500D21235 /* sticker5.png */,
+				CEA2B09C21453F6500D21235 /* sticker6.png */,
+				CEA2B09721453F6400D21235 /* sticker7.png */,
+				CEA2B09B21453F6500D21235 /* sticker8.png */,
+				CEA2B09F21453F6500D21235 /* sticker9.png */,
+				CEA2B09D21453F6500D21235 /* sticker10.png */,
 				CEA2B08F2145112C00D21235 /* PhotoEditorViewController.xib */,
 			);
 			path = Resources;
@@ -1223,9 +1256,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEA2B0A821453F6600D21235 /* sticker10.png in Resources */,
+				CEA2B0A421453F6600D21235 /* sticker0.png in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				CEA2B0AB21453F6600D21235 /* sticker1.png in Resources */,
+				CEA2B0A721453F6600D21235 /* sticker6.png in Resources */,
+				CEA2B0A921453F6600D21235 /* sticker4.png in Resources */,
 				CEA2B0902145112C00D21235 /* PhotoEditorViewController.xib in Resources */,
+				CEA2B0A621453F6600D21235 /* sticker8.png in Resources */,
+				CEA2B0A221453F6600D21235 /* sticker7.png in Resources */,
+				CEA2B0AA21453F6600D21235 /* sticker9.png in Resources */,
+				CEA2B0AC21453F6600D21235 /* sticker5.png in Resources */,
+				CEA2B0A521453F6600D21235 /* sticker3.png in Resources */,
+				CEA2B0A321453F6600D21235 /* sticker2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
