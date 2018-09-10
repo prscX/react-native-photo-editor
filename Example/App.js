@@ -49,32 +49,32 @@ export default class App extends Component<Props> {
         "sticker5",
         "sticker6",
         "sticker7",
-        'sticker8', 
-        'sticker9', 
-        'sticker10'
+        "sticker8",
+        "sticker9",
+        "sticker10"
       ],
-      hiddenControls: undefined,
+      hiddenControls: [],
       colors: undefined
     });
   }
 
   componentDidMount() {
-    // let photoPath = RNFS.DocumentDirectoryPath + "/photo.jpg";
-    // let binaryFile = resolveAssetSource(photo)
+    let photoPath = RNFS.DocumentDirectoryPath + "/photo.jpg";
+    let binaryFile = resolveAssetSource(photo)
 
-    // RNFS.readFile("http://localhost:8081/assets/assets/photo.jpg", "base64")
-    //   .then(data => {
-    //     RNFS.write(photoPath, data)
-    //       .then(success => {
-    //         console.log("FILE WRITTEN!");
-    //       })
-    //       .catch(err => {
-    //         console.log(err.message);
-    //       });
-    //   })
-    //   .catch(err => {
-    //     console.log(err.message);
-    //   });
+    RNFS.readFile("http://localhost:8081/assets/assets/photo.jpg", "base64")
+      .then(data => {
+        RNFS.write(photoPath, data)
+          .then(success => {
+            console.log("FILE WRITTEN!");
+          })
+          .catch(err => {
+            console.log(err.message);
+          });
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
   }
 
   render() {

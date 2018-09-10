@@ -161,19 +161,26 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         clearAllTextTextView.setOnClickListener(this);
         goToNextTextView.setOnClickListener(this);
 
+        ArrayList<Integer> intentColors = (ArrayList<Integer>) getIntent().getExtras().getSerializable("colorPickerColors");
+
         colorPickerColors = new ArrayList<>();
-        colorPickerColors.add(getResources().getColor(R.color.black));
-        colorPickerColors.add(getResources().getColor(R.color.blue_color_picker));
-        colorPickerColors.add(getResources().getColor(R.color.brown_color_picker));
-        colorPickerColors.add(getResources().getColor(R.color.green_color_picker));
-        colorPickerColors.add(getResources().getColor(R.color.orange_color_picker));
-        colorPickerColors.add(getResources().getColor(R.color.red_color_picker));
-        colorPickerColors.add(getResources().getColor(R.color.red_orange_color_picker));
-        colorPickerColors.add(getResources().getColor(R.color.sky_blue_color_picker));
-        colorPickerColors.add(getResources().getColor(R.color.violet_color_picker));
-        colorPickerColors.add(getResources().getColor(R.color.white));
-        colorPickerColors.add(getResources().getColor(R.color.yellow_color_picker));
-        colorPickerColors.add(getResources().getColor(R.color.yellow_green_color_picker));
+        if (intentColors != null) {
+            colorPickerColors = intentColors;
+        } else {
+            colorPickerColors.add(getResources().getColor(R.color.black));
+            colorPickerColors.add(getResources().getColor(R.color.blue_color_picker));
+            colorPickerColors.add(getResources().getColor(R.color.brown_color_picker));
+            colorPickerColors.add(getResources().getColor(R.color.green_color_picker));
+            colorPickerColors.add(getResources().getColor(R.color.orange_color_picker));
+            colorPickerColors.add(getResources().getColor(R.color.red_color_picker));
+            colorPickerColors.add(getResources().getColor(R.color.red_orange_color_picker));
+            colorPickerColors.add(getResources().getColor(R.color.sky_blue_color_picker));
+            colorPickerColors.add(getResources().getColor(R.color.violet_color_picker));
+            colorPickerColors.add(getResources().getColor(R.color.white));
+            colorPickerColors.add(getResources().getColor(R.color.yellow_color_picker));
+            colorPickerColors.add(getResources().getColor(R.color.yellow_green_color_picker));
+        }
+
 
         new CountDownTimer(500, 100) {
 
@@ -185,6 +192,33 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             }
 
         }.start();
+
+        ArrayList hiddenControls = (ArrayList<Integer>) getIntent().getExtras().getSerializable("hiddenControls");
+        for (int i = 0;i < hiddenControls.size();i++) {
+            if (hiddenControls.get(i).toString().equalsIgnoreCase("text")) {
+                addTextView.setVisibility(View.INVISIBLE);
+            }
+            if (hiddenControls.get(i).toString().equalsIgnoreCase("clear")) {
+                clearAllTextView.setVisibility(View.INVISIBLE);
+                clearAllTextTextView.setVisibility(View.INVISIBLE);
+            }
+            if (hiddenControls.get(i).toString().equalsIgnoreCase("crop")) {
+
+            }
+            if (hiddenControls.get(i).toString().equalsIgnoreCase("draw")) {
+                addPencil.setVisibility(View.INVISIBLE);
+            }
+            if (hiddenControls.get(i).toString().equalsIgnoreCase("save")) {
+                saveTextTextView.setVisibility(View.INVISIBLE);
+                saveTextView.setVisibility(View.INVISIBLE);
+            }
+            if (hiddenControls.get(i).toString().equalsIgnoreCase("share")) {
+
+            }
+            if (hiddenControls.get(i).toString().equalsIgnoreCase("sticker")) {
+                addImageEmojiTextView.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     private boolean stringIsNotEmpty(String string) {

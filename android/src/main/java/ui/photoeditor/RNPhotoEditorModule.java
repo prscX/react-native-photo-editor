@@ -2,6 +2,7 @@
 package ui.photoeditor;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.util.Log;
 
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -14,6 +15,8 @@ import com.facebook.react.bridge.ReadableMap;
 import com.ahmedadeltito.photoeditorsdk.PhotoEditorSDK;
 import com.ahmedadeltito.photoeditor.PhotoEditorActivity;
 import android.content.Intent;
+
+import java.util.ArrayList;
 
 public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
 
@@ -30,8 +33,24 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
   public void Edit(final ReadableMap props, final Callback onDone, final Callback onCancel) {
     String path = props.getString("path");
 
+    ReadableArray hiddenControls = props.getArray("hiddenControls");
+    ArrayList hiddenControlsIntent = new ArrayList<>();
+
+    for (int i = 0;i < hiddenControls.size();i++) {
+      hiddenControlsIntent.add(hiddenControls.getString(i));
+    }
+
+    ReadableArray colors = props.getArray("colors");
+    ArrayList colorPickerColors = new ArrayList<>();
+
+    for (int i = 0;i < colors.size();i++) {
+      colorPickerColors.add(Color.parseColor(colors.getString(i)));
+    }
+
     Intent intent = new Intent(getCurrentActivity(), PhotoEditorActivity.class);
     intent.putExtra("selectedImagePath", path);
+    intent.putExtra("colorPickerColors", colorPickerColors);
+    intent.putExtra("hiddenControls", hiddenControlsIntent);
 
     getCurrentActivity().startActivity(intent);
 
