@@ -34,6 +34,8 @@ import com.ahmedadeltito.photoeditorsdk.PhotoEditorSDK;
 import com.ahmedadeltito.photoeditorsdk.ViewType;
 import com.viewpagerindicator.PageIndicator;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -110,8 +112,20 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         deleteTextView.setTypeface(newFont);
 
         final List<Fragment> fragmentsList = new ArrayList<>();
-        fragmentsList.add(new ImageFragment());
-        fragmentsList.add(new EmojiFragment());
+
+        ImageFragment imageFragment = new ImageFragment();
+        ArrayList stickers = (ArrayList<Integer>) getIntent().getExtras().getSerializable("stickers");
+        if (stickers != null && stickers.size() > 0) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("stickers", stickers);
+
+            imageFragment.setArguments(bundle);
+        }
+
+        fragmentsList.add(imageFragment);
+
+        EmojiFragment emojiFragment = new EmojiFragment();
+        fragmentsList.add(emojiFragment);
 
         PreviewSlidePagerAdapter adapter = new PreviewSlidePagerAdapter(getSupportFragmentManager(), fragmentsList);
         pager.setAdapter(adapter);
@@ -356,6 +370,45 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         }.start();
     }
 
+
+    private void returnBackWithUpdateImage() {
+        updateView(View.GONE);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        parentImageRelativeLayout.setLayoutParams(layoutParams);
+        new CountDownTimer(1000, 500) {
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            public void onFinish() {
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String imageName = "IMG_" + timeStamp + ".jpg";
+
+                String selectedImagePath = getIntent().getExtras().getString("selectedImagePath");
+                File file = new File(selectedImagePath);
+
+                try {
+                    FileOutputStream out = new FileOutputStream(file);
+                    if (parentImageRelativeLayout != null) {
+                        parentImageRelativeLayout.setDrawingCacheEnabled(true);
+                        parentImageRelativeLayout.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 80, out);
+                    }
+
+                    out.flush();
+                    out.close();
+                } catch (Exception var7) {
+                    var7.printStackTrace();
+                }
+
+
+                finish();
+            }
+        }.start();
+    }
+
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.close_tv) {
@@ -377,7 +430,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         } else if (v.getId() == R.id.erase_drawing_tv) {
             eraseDrawing();
         } else if (v.getId() == R.id.go_to_next_screen_tv) {
-            returnBackWithSavedImage();
+            returnBackWithUpdateImage();
         }
     }
 

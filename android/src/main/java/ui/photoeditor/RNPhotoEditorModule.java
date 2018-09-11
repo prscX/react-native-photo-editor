@@ -2,8 +2,12 @@
 package ui.photoeditor;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -33,6 +37,17 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
   public void Edit(final ReadableMap props, final Callback onDone, final Callback onCancel) {
     String path = props.getString("path");
 
+    //Process Stickers
+    ReadableArray stickers = props.getArray("stickers");
+    ArrayList<Integer> stickersIntent = new ArrayList<Integer>();
+
+    for (int i = 0;i < stickers.size();i++) {
+      int drawableId = getReactApplicationContext().getResources().getIdentifier(stickers.getString(i), "drawable", getReactApplicationContext().getPackageName());
+
+      stickersIntent.add(drawableId);
+    }
+
+    //Process Hidden Controls
     ReadableArray hiddenControls = props.getArray("hiddenControls");
     ArrayList hiddenControlsIntent = new ArrayList<>();
 
@@ -40,6 +55,7 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
       hiddenControlsIntent.add(hiddenControls.getString(i));
     }
 
+    //Process Colors
     ReadableArray colors = props.getArray("colors");
     ArrayList colorPickerColors = new ArrayList<>();
 
@@ -47,22 +63,13 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
       colorPickerColors.add(Color.parseColor(colors.getString(i)));
     }
 
+
     Intent intent = new Intent(getCurrentActivity(), PhotoEditorActivity.class);
     intent.putExtra("selectedImagePath", path);
     intent.putExtra("colorPickerColors", colorPickerColors);
     intent.putExtra("hiddenControls", hiddenControlsIntent);
+    intent.putExtra("stickers", stickersIntent);
 
-    getCurrentActivity().startActivity(intent);
-
-//    if (mActivity != null) {
-//      mActivity.startActivityForResult(intent, mRequestCode);
-//    } else if (mFragment != null) {
-//      mFragment.startActivityForResult(intent, mRequestCode);
-//    } else {
-//      mSupportFragment.startActivityForResult(intent, mRequestCode);
-//    }
-
-//      PhotoEditorSDK photoEditorSDK = new PhotoEditorSDK.PhotoEditorSDKBuilder(PhotoEditorActivity.this)
-//      .buildPhotoEditorSDK();
+    getCurrentActivity().startActivityForResult(intent, 1);
   }
 }
