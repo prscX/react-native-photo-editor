@@ -3,6 +3,7 @@ package com.ahmedadeltito.photoeditor;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -34,21 +35,26 @@ import com.ahmedadeltito.photoeditorsdk.PhotoEditorSDK;
 import com.ahmedadeltito.photoeditorsdk.ViewType;
 import com.viewpagerindicator.PageIndicator;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import ui.photoeditor.R;
 public class PhotoEditorActivity extends AppCompatActivity implements View.OnClickListener, OnPhotoEditorSDKListener {
+
+    public static Typeface emojiFont = null;
 
     private final String TAG = "PhotoEditorActivity";
     private RelativeLayout parentImageRelativeLayout;
     private RecyclerView drawingViewColorPickerRecyclerView;
     private TextView undoTextView, undoTextTextView, doneDrawingTextView, eraseDrawingTextView;
     private SlidingUpPanelLayout mLayout;
-    private Typeface emojiFont;
     private View topShadow;
     private RelativeLayout topShadowRelativeLayout;
     private View bottomShadow;
@@ -68,8 +74,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         options.inSampleSize = 1;
         Bitmap bitmap = BitmapFactory.decodeFile(selectedImagePath, options);
 
-        Typeface newFont = Typeface.createFromAsset(getAssets(), "Eventtus-Icons.ttf");
-        emojiFont = Typeface.createFromAsset(getAssets(), "emojione-android.ttf");
+        Typeface newFont = getFontFromRes(R.raw.eventtusicons);
+        emojiFont = getFontFromRes(R.raw.emojioneandroid);
 
         BrushDrawingView brushDrawingView = (BrushDrawingView) findViewById(R.id.drawing_view);
         drawingViewColorPickerRecyclerView = (RecyclerView) findViewById(R.id.drawing_view_color_picker_recycler_view);
@@ -526,5 +532,45 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         public int getCount() {
             return 2;
         }
+    }
+
+    private Typeface getFontFromRes(int resource)
+    {
+        Typeface tf = null;
+        InputStream is = null;
+        try {
+            is = getResources().openRawResource(resource);
+        }
+        catch(Resources.NotFoundException e) {
+            Log.e(TAG, "Could not find font in resources!");
+        }
+
+        String outPath = getCacheDir() + "/tmp" + System.currentTimeMillis() + ".raw";
+
+        try
+        {
+            byte[] buffer = new byte[is.available()];
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outPath));
+
+            int l = 0;
+            while((l = is.read(buffer)) > 0)
+                bos.write(buffer, 0, l);
+
+            bos.close();
+
+            tf = Typeface.createFromFile(outPath);
+
+            // clean up
+            new File(outPath).delete();
+        }
+        catch (IOException e)
+        {
+            Log.e(TAG, "Error reading in font!");
+            return null;
+        }
+
+        Log.d(TAG, "Successfully loaded font.");
+
+        return tf;
     }
 }

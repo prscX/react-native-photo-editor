@@ -1,7 +1,6 @@
 package com.ahmedadeltito.photoeditor;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+
 import ui.photoeditor.R;
 
 /**
@@ -18,7 +18,7 @@ import ui.photoeditor.R;
 
 public class EmojiAdapter extends RecyclerView.Adapter<EmojiAdapter.ViewHolder> {
 
-    private Typeface emojiFont;
+//    private Typeface emojiFont;
     private Context context;
     private List<String> emojiIds;
     private LayoutInflater inflater;
@@ -28,7 +28,7 @@ public class EmojiAdapter extends RecyclerView.Adapter<EmojiAdapter.ViewHolder> 
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.emojiIds = emojiIds;
-        emojiFont = Typeface.createFromAsset(context.getAssets(), "emojione-android.ttf");
+//        emojiFont = Typeface.createFromAsset(context.getAssets(), "emojione-android.ttf");
     }
 
     @Override
@@ -74,7 +74,7 @@ public class EmojiAdapter extends RecyclerView.Adapter<EmojiAdapter.ViewHolder> 
         public ViewHolder(View itemView) {
             super(itemView);
             emojiTextView = (TextView) itemView.findViewById(R.id.fragment_photo_edit_emoji_tv);
-            emojiTextView.setTypeface(emojiFont);
+            emojiTextView.setTypeface(PhotoEditorActivity.emojiFont);
             emojiTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
