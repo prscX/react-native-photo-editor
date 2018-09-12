@@ -43,7 +43,6 @@
 		CE4A72C521455A32002CFD1F /* iOSPhotoEditor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE4A729F2145573D002CFD1F /* iOSPhotoEditor.framework */; };
 		CE4A72C621455A32002CFD1F /* iOSPhotoEditor.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CE4A729F2145573D002CFD1F /* iOSPhotoEditor.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CE4A72F121455A3D002CFD1F /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEA2B0852144EE7000D21235 /* libRNFS.a */; };
-		CEA2B0902145112C00D21235 /* PhotoEditorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B08F2145112C00D21235 /* PhotoEditorViewController.xib */; };
 		CEA2B0A221453F6600D21235 /* sticker7.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B09721453F6400D21235 /* sticker7.png */; };
 		CEA2B0A321453F6600D21235 /* sticker2.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B09821453F6400D21235 /* sticker2.png */; };
 		CEA2B0A421453F6600D21235 /* sticker0.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA2B09921453F6400D21235 /* sticker0.png */; };
@@ -430,7 +429,6 @@
 		9C49D046BA004B25B98815F6 /* libRNFS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFS.a; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		CE4A72992145573D002CFD1F /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = "../../node_modules/react-native-photo-editor/ios/Pods/Pods.xcodeproj"; sourceTree = "<group>"; };
-		CEA2B08F2145112C00D21235 /* PhotoEditorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoEditorViewController.xib; sourceTree = "<group>"; };
 		CEA2B09721453F6400D21235 /* sticker7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker7.png; sourceTree = "<group>"; };
 		CEA2B09821453F6400D21235 /* sticker2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker2.png; sourceTree = "<group>"; };
 		CEA2B09921453F6400D21235 /* sticker0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker0.png; sourceTree = "<group>"; };
@@ -771,7 +769,6 @@
 				CEA2B09B21453F6500D21235 /* sticker8.png */,
 				CEA2B09F21453F6500D21235 /* sticker9.png */,
 				CEA2B09D21453F6500D21235 /* sticker10.png */,
-				CEA2B08F2145112C00D21235 /* PhotoEditorViewController.xib */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1295,7 +1292,6 @@
 				CEA2B0AB21453F6600D21235 /* sticker1.png in Resources */,
 				CEA2B0A721453F6600D21235 /* sticker6.png in Resources */,
 				CEA2B0A921453F6600D21235 /* sticker4.png in Resources */,
-				CEA2B0902145112C00D21235 /* PhotoEditorViewController.xib in Resources */,
 				CEA2B0A621453F6600D21235 /* sticker8.png in Resources */,
 				CEA2B0A221453F6600D21235 /* sticker7.png in Resources */,
 				CEA2B0AA21453F6600D21235 /* sticker9.png in Resources */,
