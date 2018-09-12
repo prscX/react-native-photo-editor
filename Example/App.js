@@ -18,6 +18,7 @@ import resolveAssetSource from "react-native/Libraries/Image/resolveAssetSource"
 import { RNPhotoEditor } from 'react-native-photo-editor'
 
 import RNFS from 'react-native-fs'
+import RNFetchBlob from 'rn-fetch-blob'
 
 import photo from './assets/photo.jpg'
 
@@ -62,9 +63,10 @@ export default class App extends Component<Props> {
     let photoPath = RNFS.DocumentDirectoryPath + "/photo.jpg";
     let binaryFile = resolveAssetSource(photo)
 
-    RNFS.readFile("http://localhost:8081/assets/assets/photo.jpg", "base64")
-      .then(data => {
-        RNFS.write(photoPath, data)
+    RNFetchBlob.config({ fileCache: true })
+      .fetch("GET", binaryFile.uri)
+      .then(resp => {
+        RNFS.moveFile(resp.path(), photoPath)
           .then(success => {
             console.log("FILE WRITTEN!");
           })

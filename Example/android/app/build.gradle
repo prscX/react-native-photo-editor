@@ -138,6 +138,7 @@ android {
 }
 
 dependencies {
+    compile project(':rn-fetch-blob')
     compile project(':react-native-fs')
     compile project(':react-native-photo-editor')
     compile fileTree(dir: "libs", include: ["*.jar"])
