@@ -17,16 +17,15 @@ If this project has helped you out, please support us with a star 🌟
 </h1>
 This library is a React Native bridge around native photo editor libraries. It allows you to edit any photo by providing below set of features:
 
-<br/>
 
-- Cropping
-- Adding Images -Stickers-
-- Adding Text with Colors
-- Drawing with Colors
-- Scaling and Rotating Objects
-- Deleting Objects
-- Saving to Photos and Sharing
-- Cool Animations
+* _**Cropping**_
+* _**Adding Images -Stickers-**_
+* _**Adding Text with Colors**_
+* _**Drawing with Colors**_
+* _**Scaling and Rotating Objects**_
+* _**Deleting Objects**_
+* _**Saving to Photos and Sharing**_
+* _**Cool Animations**_
 
 <img src="assets/hero.gif" />
 
