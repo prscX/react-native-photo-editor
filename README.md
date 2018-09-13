@@ -93,7 +93,7 @@ android {
 
 ## 💻 Usage
 
-import { RNPhotoEditor } from 'react-native-photo-editor'
+`import { RNPhotoEditor } from 'react-native-photo-editor'`
 
 * API Way
 
@@ -121,6 +121,14 @@ RNPhotoEditor.Edit({
 | `colors`     | `array: HEX-COLOR` |    `[#000000, #808080, #a9a9a9, #FFFFFF, #0000ff, #00ff00, #ff0000, #ffff00, #ffa500, #800080, #00ffff, #a52a2a, #ff00ff]`     | Specify colors you want to show for draw/text              |
 | `onDone`    | `func` |         | Specify done callback            |
 | `onCancel`        | `func`            |      | Specify cancel callback       |
+
+
+## Stickers
+
+If you want to add custom stickers, please add them to your native project:
+
+* **iOS:** Add stickers to iOS Resources folder
+* **Android:** Add stickers to app `drawable` folder
 
 
 ## ✨ Credits
