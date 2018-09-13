@@ -14,12 +14,9 @@
     ReactNative: Native Photo Editor (Android/iOS)
 
 If this project has helped you out, please support us with a star 🌟
-
-Releasing 13th Sept, Stay Tuned
 </h1>
+This library is a React Native bridge around native photo editor libraries. It allows you to edit any photo by providing below set of features:
 
-
-## 🎨 Features
 - Cropping
 - Adding Images -Stickers-
 - Adding Text with Colors
@@ -28,6 +25,102 @@ Releasing 13th Sept, Stay Tuned
 - Deleting Objects
 - Saving to Photos and Sharing
 - Cool Animations
+
+<img src="assets/hero.gif" />
+
+## 📖 Getting started
+
+`$ npm install react-native-photo-editor --save`
+
+`$ react-native link react-native-photo-editor`
+
+* Android
+  * Please add below script in your build.gradle
+
+```
+buildscript {
+    repositories {
+        jcenter()
+        maven { url "https://maven.google.com" }
+        maven { url "https://jitpack.io" }
+        ...
+    }
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        jcenter()
+        maven { url "https://maven.google.com" }
+        maven { url "https://jitpack.io" }
+        ...
+    }
+}
+```
+
+  * Please add below script in your app/build.gradle
+
+```
+
+android {
+    ...
+
+    defaultConfig {
+        ...
+        renderscriptSupportModeEnabled true
+    }
+}
+```
+
+> **Note:** Android SDK 27 > is supported
+
+* iOS
+    > **iOS Prerequisite:** Please make sure CocoaPods is installed on your system
+
+  * After `react-native link react-native-photo-editor`, please verify `node_modules/react-native-photo-editor/ios/` contains `Pods` folder. If does not exist please execute `pod install` command on `node_modules/react-native-photo-editor/ios/`, if any error => try `pod repo update` then `pod install`
+  * After verification, open your project and create a folder 'RNPhotoEditor' under Libraries.
+  * Drag `node_modules/react-native-photo-editor/ios/pods/Pods.xcodeproject` into RNPhotoEditor, as well as the RNPhotoEditor.xcodeproject if it does not exist.
+  * Add the `iOSPhotoEditor.framework` into your project's `Embedded Binaries` and make sure the framework is also in linked libraries.
+  * Go to your project's `Build Settings -> Frameworks Search Path` and add `${BUILT_PRODUCTS_DIR}/iOSPhotoEditor` non-recursive.
+  * Add below property to your info.list
+
+```
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Application needs permission to write photos...</string>
+```
+
+  * Now build your iOS app through Xcode
+
+## 💻 Usage
+
+import { RNPhotoEditor } from 'react-native-photo-editor'
+
+* API Way
+
+```
+RNPhotoEditor.Edit({
+    path: RNFS.DocumentDirectoryPath + "/photo.jpg"
+});
+```
+
+* React Way
+
+```
+<RNPhotoEditor path={''} />
+```
+
+## 💡 Props
+
+- **General(iOS & Android)**
+
+| Prop                   | Type                | Default | Note                                             |
+| ---------------------- | ------------------- | ------- | ------------------------------------------------ |
+| `path: mandatory`     | `string`            |         | Specify image path you want to edit                 |
+| `hiddenControls`                | `array`            |         | Specify editor controls you want to hide `[clear, crop, draw, save, share, sticker, text]`                        |
+| `stickers`          | `array`            |         | Specify stickers you want to show in stickers picker                  |
+| `colors`     | `array: HEX-COLOR` |    `[#000000, #808080, #a9a9a9, #FFFFFF, #0000ff, #00ff00, #ff0000, #ffff00, #ffa500, #800080, #00ffff, #a52a2a, #ff00ff]`     | Specify colors you want to show for draw/text              |
+| `onDone`    | `func` |         | Specify done callback            |
+| `onCancel`        | `func`            |      | Specify cancel callback       |
 
 
 ## ✨ Credits
