@@ -123,7 +123,7 @@ RNPhotoEditor.Edit({
 | `onCancel`        | `func`            |      | Specify cancel callback       |
 
 
-## Stickers
+## ⛄️ Stickers
 
 If you want to add custom stickers, please add them to your native project:
 
