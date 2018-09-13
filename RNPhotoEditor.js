@@ -53,34 +53,6 @@ class PhotoEditor extends PureComponent {
       }
     );
   }
-
-  //   componentDidMount() {
-  //     this._show();
-  //   }
-
-  //   componentDidUpdate() {
-  //     this._show();
-  //   }
-
-  //   _show() {
-  //     if (this.props.visible) {
-  //       PhotoEditor.Show({
-  //         filter: this.props.filter,
-  //         filterDirectories: this.props.filterDirectories,
-  //         path: this.props.path,
-  //         hiddenFiles: this.props.hiddenFiles,
-  //         closeMenu: this.props.closeMenu,
-  //         title: this.props.title,
-  //         editable: this.props.editable,
-  //         onDone: this.props.onDone,
-  //         onCancel: this.props.onCancel
-  //       });
-  //     }
-  //   }
-
-  //   render() {
-  //     return null;
-  //   }
 }
 
 export { PhotoEditor as RNPhotoEditor }

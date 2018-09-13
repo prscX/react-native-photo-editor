@@ -93,21 +93,14 @@ android {
 
 ## 💻 Usage
 
-`import { RNPhotoEditor } from 'react-native-photo-editor'`
-
-* API Way
-
 ```
+import { RNPhotoEditor } from 'react-native-photo-editor'
+
 RNPhotoEditor.Edit({
     path: RNFS.DocumentDirectoryPath + "/photo.jpg"
 });
 ```
 
-* React Way
-
-```
-<RNPhotoEditor path={''} />
-```
 
 ## 💡 Props
 
