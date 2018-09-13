@@ -36,7 +36,7 @@ repositories {
 
 dependencies {
     compile 'com.facebook.react:react-native:+'
-    compile 'com.github.eventtus:photo-editor-android:v1.0'
+    compile 'com.github.prscX:photo-editor-android:master-SNAPSHOT'
     compile 'fr.avianey.com.viewpagerindicator:library:2.4.1@aar'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.android.support:design:27.1.1'
