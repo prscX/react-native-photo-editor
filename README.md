@@ -73,6 +73,10 @@ android {
 }
 ```
 
+- Add below activity in your app activites:
+
+`<activity android:name="com.ahmedadeltito.photoeditor.PhotoEditorActivity" />`
+
 > **Note:** Android SDK 27 > is supported
 
 * iOS
