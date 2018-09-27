@@ -18,9 +18,12 @@ RCTResponseSenderBlock _onCancelEditing = nil;
     if (_onDoneEditing == nil) return;
     
     // Save image.
-    [UIImagePNGRepresentation(image) writeToFile:_editImagePath atomically:YES];
+    NSURL *tmpDirURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
+    NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]]] URLByAppendingPathExtension:@"jpg"];
     
-    _onDoneEditing(@[]);
+    [UIImageJPEGRepresentation(image, 0.8) writeToURL:fileURL atomically:YES];
+    
+    _onDoneEditing(@[[fileURL absoluteString]]);
 }
 
 - (void)canceledEditing {
