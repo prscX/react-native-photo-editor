@@ -24,7 +24,7 @@ RCTResponseSenderBlock _onCancelEditing = nil;
 }
 
 - (void)canceledEditing {
-    if (_onCancelEditing == nil) return
+    if (_onCancelEditing == nil) return;
         
     _onCancelEditing(@[]);
 }
