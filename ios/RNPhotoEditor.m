@@ -40,7 +40,9 @@ RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBl
         PhotoEditorViewController *photoEditor = [[PhotoEditorViewController alloc] initWithNibName:@"PhotoEditorViewController" bundle: [NSBundle bundleForClass:[PhotoEditorViewController class]]];
 
         // Process Image for Editing
-        UIImage *image = [UIImage imageWithContentsOfFile:_editImagePath];
+        NSURL *url = [NSURL URLWithString:_editImagePath];
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        UIImage *image = [UIImage imageWithData:data];
         photoEditor.image = image;
         
         // Process Stickers
