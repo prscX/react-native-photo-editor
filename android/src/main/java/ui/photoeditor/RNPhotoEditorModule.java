@@ -1,32 +1,61 @@
 
 package ui.photoeditor;
 
-import android.app.Activity;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
+import com.ahmedadeltito.photoeditor.PhotoEditorActivity;
+import com.facebook.react.bridge.ActivityEventListener;
+import com.facebook.react.bridge.BaseActivityEventListener;
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
-import com.ahmedadeltito.photoeditorsdk.PhotoEditorSDK;
-import com.ahmedadeltito.photoeditor.PhotoEditorActivity;
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 
 import java.util.ArrayList;
 
 public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
 
+  private static final int PHOTO_EDITOR_REQUEST = 1539266202;
+  private static final String E_PHOTO_EDITOR_CANCELLED = "E_PHOTO_EDITOR_CANCELLED";
+
+
+  private Callback mDoneCallback;
+  private Callback mCancelCallback;
+
+  private final ActivityEventListener mActivityEventListener = new BaseActivityEventListener() {
+
+    @Override
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent intent) {
+      if (requestCode == PHOTO_EDITOR_REQUEST) {
+
+        if (mDoneCallback != null) {
+
+          if (resultCode == Activity.RESULT_CANCELED) {
+            mCancelCallback.invoke(resultCode);
+          } else {
+            mDoneCallback.invoke(resultCode);
+          }
+
+        }
+
+        mCancelCallback = null;
+        mDoneCallback = null;
+      }
+    }
+  };
+
   public RNPhotoEditorModule(ReactApplicationContext reactContext) {
     super(reactContext);
+
+    reactContext.addActivityEventListener(mActivityEventListener);
+
   }
+
+
 
   @Override
   public String getName() {
@@ -70,6 +99,10 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
     intent.putExtra("hiddenControls", hiddenControlsIntent);
     intent.putExtra("stickers", stickersIntent);
 
-    getCurrentActivity().startActivityForResult(intent, 1);
+
+    mCancelCallback = onCancel;
+    mDoneCallback = onDone;
+
+    getCurrentActivity().startActivityForResult(intent, PHOTO_EDITOR_REQUEST);
   }
 }

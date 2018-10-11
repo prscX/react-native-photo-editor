@@ -408,6 +408,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                     var7.printStackTrace();
                 }
 
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_OK, returnIntent);
 
                 finish();
             }
