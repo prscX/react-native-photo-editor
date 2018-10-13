@@ -48,8 +48,8 @@ class PhotoEditor extends PureComponent {
       (...args) => {
         props.onDone && props.onDone(...args);
       },
-      () => {
-        props.onCancel && props.onCancel();
+      (...args) => {
+        props.onCancel && props.onCancel(...args);
       }
     );
   }
