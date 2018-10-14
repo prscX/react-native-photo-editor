@@ -55,7 +55,13 @@ export default class App extends Component<Props> {
         "sticker10"
       ],
       hiddenControls: [],
-      colors: undefined
+      colors: undefined,
+      onDone: () => {
+        console.log('on done')
+      },
+      onCancel: () => {
+        console.log('on cancel')
+      }
     });
   }
 

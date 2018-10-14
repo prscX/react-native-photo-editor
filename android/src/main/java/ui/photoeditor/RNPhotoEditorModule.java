@@ -36,9 +36,9 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
         if (mDoneCallback != null) {
 
           if (resultCode == Activity.RESULT_CANCELED) {
-            mCancelCallback.invoke(resultCode);
+            mCancelCallback.invoke();
           } else {
-            mDoneCallback.invoke(intent.getExtras().getString("imagePath"));
+            mDoneCallback.invoke();
           }
 
         }
