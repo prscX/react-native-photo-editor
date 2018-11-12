@@ -37,6 +37,8 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>iOS 10 needs permission to write photos...</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Our application needs permission to write photos...</string>
 	<key>UILaunchStoryboardName</key>
