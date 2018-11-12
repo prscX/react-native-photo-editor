@@ -92,6 +92,10 @@ android {
 ```
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Application needs permission to write photos...</string>
+
+	<!-- If you are targeting devices running on iOS 10 or later, you'll also need to add: -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>iOS 10 needs permission to write photos...</string>
 ```
 
   * Now build your iOS app through Xcode
