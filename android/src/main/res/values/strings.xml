@@ -13,6 +13,7 @@
     <string name="continue_txt">Continue</string>
     <string name="not_now">NOT NOW</string>
     <string name="media_access_denied_msg">You denied storage access, no photos will be added.</string>
+    <string name="save_image_succeed">Image saved</string>
 
     <string name="ic_close">"\ue918"</string>
     <string name="ic_text">"\ue945"</string>
