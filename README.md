@@ -77,6 +77,10 @@ android {
 
 `<activity android:name="com.ahmedadeltito.photoeditor.PhotoEditorActivity" />`
 
+- To save image to the public external storage, you must request the WRITE_EXTERNAL_STORAGE permission in your manifest file:
+
+`<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />`
+
 > **Note:** Android SDK 27 > is supported
 
 * iOS

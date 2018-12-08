@@ -1,17 +1,24 @@
 package com.ahmedadeltito.photoeditor;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.PermissionChecker;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ahmedadeltito.photoeditor.widget.SlidingUpPanelLayout;
 import com.ahmedadeltito.photoeditorsdk.BrushDrawingView;
@@ -49,6 +57,8 @@ import ui.photoeditor.R;
 public class PhotoEditorActivity extends AppCompatActivity implements View.OnClickListener, OnPhotoEditorSDKListener {
 
     public static Typeface emojiFont = null;
+
+    protected static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_GALLERY = 0x1;
 
     private final String TAG = "PhotoEditorActivity";
     private RelativeLayout parentImageRelativeLayout;
@@ -355,25 +365,58 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void returnBackWithSavedImage() {
-        updateView(View.GONE);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        parentImageRelativeLayout.setLayoutParams(layoutParams);
-        new CountDownTimer(1000, 500) {
-            public void onTick(long millisUntilFinished) {
+        int permissionCheck = PermissionChecker.checkCallingOrSelfPermission(this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-            }
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            updateView(View.GONE);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+            parentImageRelativeLayout.setLayoutParams(layoutParams);
+            new CountDownTimer(1000, 500) {
+                public void onTick(long millisUntilFinished) {
 
-            public void onFinish() {
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String imageName = "IMG_" + timeStamp + ".jpg";
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("imagePath", photoEditorSDK.saveImage("PhotoEditorSDK", imageName));
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
-            }
-        }.start();
+                }
+
+                public void onFinish() {
+                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                    String imageName = "IMG_" + timeStamp + ".jpg";
+
+                    if (isSDCARDMounted()) {
+                        String folderName = "PhotoEditorSDK";
+                        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), folderName);
+                        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
+                            Log.d("PhotoEditorSDK", "Failed to create directory");
+                        }
+
+                        String selectedOutputPath = mediaStorageDir.getPath() + File.separator + imageName;
+                        Log.d("PhotoEditorSDK", "selected camera path " + selectedOutputPath);
+                        File file = new File(selectedOutputPath);
+
+                        try {
+                            FileOutputStream out = new FileOutputStream(file);
+                            if (parentImageRelativeLayout != null) {
+                                parentImageRelativeLayout.setDrawingCacheEnabled(true);
+                                parentImageRelativeLayout.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 80, out);
+                            }
+
+                            out.flush();
+                            out.close();
+                        } catch (Exception var7) {
+                            var7.printStackTrace();
+                        }
+                    }
+
+                    Intent returnIntent = new Intent();
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }
+            }.start();
+            Toast.makeText(this, getString(R.string.save_image_succeed), Toast.LENGTH_SHORT).show();
+        } else {
+            showPermissionRequest();
+        }
     }
 
 
@@ -414,6 +457,48 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 finish();
             }
         }.start();
+    }
+
+    private boolean isSDCARDMounted() {
+        String status = Environment.getExternalStorageState();
+        return status.equals("mounted");
+    }
+
+    public void showPermissionRequest() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.access_media_permissions_msg));
+        builder.setPositiveButton(getString(R.string.continue_txt), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ActivityCompat.requestPermissions(PhotoEditorActivity.this,
+                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_GALLERY);
+            }
+        });
+        builder.setNegativeButton(getString(R.string.not_now), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(PhotoEditorActivity.this, getString(R.string.media_access_denied_msg), Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_GALLERY) {
+            // If request is cancelled, the result arrays are empty.
+            int permissionCheck = PermissionChecker.checkCallingOrSelfPermission(this,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                returnBackWithSavedImage();
+            } else {
+                // permission denied, boo! Disable the
+                // functionality that depends on this permission.
+                Toast.makeText(this, getString(R.string.media_access_denied_msg), Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
     }
 
     @Override
