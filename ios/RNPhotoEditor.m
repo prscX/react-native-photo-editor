@@ -18,9 +18,13 @@ RCTResponseSenderBlock _onCancelEditing = nil;
     if (_onDoneEditing == nil) return;
     
     // Save image.
-    [UIImagePNGRepresentation(image) writeToFile:_editImagePath atomically:YES];
+    NSString *newImagePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) firstObject];
+    NSString *fileName = [[_editImagePath componentsSeparatedByString:@"/"].lastObject componentsSeparatedByString:@"."].firstObject;
+    fileName = [fileName stringByAppendingString:@".png"];
+    newImagePath = [newImagePath stringByAppendingPathComponent:fileName];
+    [UIImagePNGRepresentation(image) writeToFile:newImagePath atomically:YES];
     
-    _onDoneEditing(@[]);
+    _onDoneEditing(@[newImagePath]);
 }
 
 - (void)canceledEditing {
