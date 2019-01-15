@@ -18,9 +18,13 @@ RCTResponseSenderBlock _onCancelEditing = nil;
     if (_onDoneEditing == nil) return;
     
     // Save image.
-    [UIImagePNGRepresentation(image) writeToFile:_editImagePath atomically:YES];
+    NSString *newImagePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) firstObject];
+    NSString *fileName = [[_editImagePath componentsSeparatedByString:@"/"].lastObject componentsSeparatedByString:@"."].firstObject;
+    fileName = [fileName stringByAppendingString:@".png"];
+    newImagePath = [newImagePath stringByAppendingPathComponent:fileName];
+    [UIImagePNGRepresentation(image) writeToFile:newImagePath atomically:YES];
     
-    _onDoneEditing(@[]);
+    _onDoneEditing(@[newImagePath]);
 }
 
 - (void)canceledEditing {
@@ -55,7 +59,11 @@ RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBl
         NSMutableArray *imageStickers = [[NSMutableArray alloc] initWithCapacity:stickers.count];
 
         for (NSString *sticker in stickers) {
-            [imageStickers addObject: [UIImage imageNamed: sticker]];
+            NSString *stickerFile = [sticker stringByAppendingString:@".png"];
+            UIImage *image = [UIImage imageNamed: stickerFile];
+            if(image){
+                [imageStickers addObject: image];
+            }
         }
 
         photoEditor.stickers = imageStickers;
