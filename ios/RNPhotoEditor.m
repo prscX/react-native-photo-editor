@@ -27,7 +27,7 @@ RCTResponseSenderBlock _onCancelEditing = nil;
 }
 
 - (void)canceledEditing {
-    if (_onCancelEditing == nil) return
+    if (_onCancelEditing == nil) return;
         
     _onCancelEditing(@[]);
 }
@@ -43,9 +43,14 @@ RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBl
         PhotoEditorViewController *photoEditor = [[PhotoEditorViewController alloc] initWithNibName:@"PhotoEditorViewController" bundle: [NSBundle bundleForClass:[PhotoEditorViewController class]]];
 
         // Process Image for Editing
-        NSURL *url = [NSURL URLWithString:_editImagePath];
-        NSData *data = [NSData dataWithContentsOfURL:url];
-        UIImage *image = [UIImage imageWithData:data];
+        UIImage *image = [UIImage imageWithContentsOfFile:_editImagePath];
+        if (image == nil) {
+            NSURL *url = [NSURL URLWithString:_editImagePath];
+            NSData *data = [NSData dataWithContentsOfURL:url];
+
+            image = [UIImage imageWithData:data];
+        }
+        
         photoEditor.image = image;
         
         // Process Stickers

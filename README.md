@@ -77,6 +77,10 @@ android {
 
 `<activity android:name="com.ahmedadeltito.photoeditor.PhotoEditorActivity" />`
 
+- To save image to the public external storage, you must request the WRITE_EXTERNAL_STORAGE permission in your manifest file:
+
+`<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />`
+
 > **Note:** Android SDK 27 > is supported
 
 * iOS
@@ -92,6 +96,10 @@ android {
 ```
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Application needs permission to write photos...</string>
+
+	<!-- If you are targeting devices running on iOS 10 or later, you'll also need to add: -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>iOS 10 needs permission to write photos...</string>
 ```
 
   * Now build your iOS app through Xcode
