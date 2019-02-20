@@ -382,6 +382,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 public void onFinish() {
                     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                     String imageName = "IMG_" + timeStamp + ".jpg";
+                    Intent returnIntent = new Intent();
 
                     if (isSDCARDMounted()) {
                         String folderName = "PhotoEditorSDK";
@@ -391,6 +392,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                         }
 
                         String selectedOutputPath = mediaStorageDir.getPath() + File.separator + imageName;
+                        returnIntent.putExtra("imagePath", selectedOutputPath);
                         Log.d("PhotoEditorSDK", "selected camera path " + selectedOutputPath);
                         File file = new File(selectedOutputPath);
 
@@ -408,7 +410,6 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                         }
                     }
 
-                    Intent returnIntent = new Intent();
                     setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 }
@@ -452,9 +453,6 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 } catch (Exception var7) {
                     var7.printStackTrace();
                 }
-
-                Intent returnIntent = new Intent();
-                setResult(Activity.RESULT_OK, returnIntent);
 
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("imagePath", newPath);
