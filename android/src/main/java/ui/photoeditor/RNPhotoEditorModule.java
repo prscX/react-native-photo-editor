@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
 
-  private static final int PHOTO_EDITOR_REQUEST = 1539266202;
+  private static final int PHOTO_EDITOR_REQUEST = 1;
   private static final String E_PHOTO_EDITOR_CANCELLED = "E_PHOTO_EDITOR_CANCELLED";
 
 
