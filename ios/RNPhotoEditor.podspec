@@ -15,11 +15,12 @@ Pod::Spec.new do |s|
   s.library        = 'z'
   s.preserve_paths = '*.js'
   s.source       = { :git => "https://github.com/prscX/react-native-photo-editor.git", :tag => "master" }
-  s.source_files  = "RNPhotoEditor/**/*.{h,m}"
+  s.source_files  = "*.{h,m}"
   s.requires_arc = true
   s.static_framework = true
 
   s.dependency "React"
+  s.dependency "iOSPhotoEditor"
   #s.dependency "others"
 
 end
