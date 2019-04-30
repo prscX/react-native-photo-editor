@@ -11,7 +11,6 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
-import android.util.Log;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -36,9 +35,9 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
         if (mDoneCallback != null) {
 
           if (resultCode == Activity.RESULT_CANCELED) {
-            mCancelCallback.invoke();
+            mCancelCallback.invoke(resultCode);
           } else {
-            mDoneCallback.invoke();
+            mDoneCallback.invoke(intent.getExtras().getString("imagePath"));
           }
 
         }
