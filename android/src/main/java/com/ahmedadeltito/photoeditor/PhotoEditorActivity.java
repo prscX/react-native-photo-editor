@@ -419,6 +419,13 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
                             out.flush();
                             out.close();
+                            try {
+                                ExifInterface exifDest = new ExifInterface(file.getAbsolutePath());
+                                exifDest.setAttribute(ExifInterface.TAG_ORIENTATION, Integer.toString(imageOrientation));
+                                exifDest.saveAttributes();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         } catch (Exception var7) {
                             var7.printStackTrace();
                         }
@@ -465,6 +472,13 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
                     out.flush();
                     out.close();
+                    try {
+                        ExifInterface exifDest = new ExifInterface(file.getAbsolutePath());
+                        exifDest.setAttribute(ExifInterface.TAG_ORIENTATION, Integer.toString(imageOrientation));
+                        exifDest.saveAttributes();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } catch (Exception var7) {
                     var7.printStackTrace();
                 }
