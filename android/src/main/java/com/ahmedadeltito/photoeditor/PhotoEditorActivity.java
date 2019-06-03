@@ -9,11 +9,13 @@ import android.content.res.Resources;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.media.ExifInterface;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -72,6 +74,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private ArrayList<Integer> colorPickerColors;
     private int colorCodeTextView = -1;
     private PhotoEditorSDK photoEditorSDK;
+    private int imageOrientation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +86,17 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 1;
         Bitmap bitmap = BitmapFactory.decodeFile(selectedImagePath, options);
+        Bitmap rotatedBitmap;
+        try {
+            ExifInterface exif = new ExifInterface(selectedImagePath);
+            imageOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+            rotatedBitmap = rotateBitmap(bitmap, imageOrientation, false);
+        } catch (IOException e) {
+            rotatedBitmap = bitmap;
+            imageOrientation = ExifInterface.ORIENTATION_NORMAL;
+            e.printStackTrace();
+        }
+
 
         Typeface newFont = getFontFromRes(R.raw.eventtusicons);
         emojiFont = getFontFromRes(R.raw.emojioneandroid);
@@ -115,7 +129,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         ViewPager pager = (ViewPager) findViewById(R.id.image_emoji_view_pager);
         PageIndicator indicator = (PageIndicator) findViewById(R.id.image_emoji_indicator);
 
-        photoEditImageView.setImageBitmap(bitmap);
+        photoEditImageView.setImageBitmap(rotatedBitmap);
 
         closeTextView.setTypeface(newFont);
         addTextView.setTypeface(newFont);
@@ -398,7 +412,9 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                             FileOutputStream out = new FileOutputStream(file);
                             if (parentImageRelativeLayout != null) {
                                 parentImageRelativeLayout.setDrawingCacheEnabled(true);
-                                parentImageRelativeLayout.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 80, out);
+                                Bitmap bitmap = parentImageRelativeLayout.getDrawingCache();
+                                Bitmap rotatedBitmap = rotateBitmap(bitmap, imageOrientation, true);
+                                rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
                             }
 
                             out.flush();
@@ -442,7 +458,9 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                     FileOutputStream out = new FileOutputStream(file);
                     if (parentImageRelativeLayout != null) {
                         parentImageRelativeLayout.setDrawingCacheEnabled(true);
-                        parentImageRelativeLayout.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 80, out);
+                        Bitmap bitmap = parentImageRelativeLayout.getDrawingCache();
+                        Bitmap rotatedBitmap = rotateBitmap(bitmap, imageOrientation, true);
+                        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
                     }
 
                     out.flush();
@@ -658,5 +676,64 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         Log.d(TAG, "Successfully loaded font.");
 
         return tf;
+    }
+
+    private static Bitmap rotateBitmap(Bitmap bitmap, int orientation, boolean reverse) {
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_NORMAL:
+                return bitmap;
+            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                matrix.setScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                matrix.setRotate(180);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_TRANSPOSE:
+                if (!reverse) {
+                    matrix.setRotate(90);
+                } else {
+                    matrix.setRotate(-90);
+                }
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                if (!reverse) {
+                    matrix.setRotate(90);
+                } else {
+                    matrix.setRotate(-90);
+                }
+                break;
+            case ExifInterface.ORIENTATION_TRANSVERSE:
+                if (!reverse) {
+                    matrix.setRotate(-90);
+                } else {
+                    matrix.setRotate(90);
+                }
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                if (!reverse) {
+                    matrix.setRotate(-90);
+                } else {
+                    matrix.setRotate(90);
+                }
+                break;
+            default:
+                return bitmap;
+        }
+        try {
+            Bitmap bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            bitmap.recycle();
+
+            return bmRotated;
+        } catch (OutOfMemoryError e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
