@@ -14,13 +14,17 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
 android {
-    compileSdkVersion 27
+    compileSdkVersion safeExtGet('compileSdkVersion', 27)
     buildToolsVersion '28.0.2'
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 27
+        minSdkVersion safeExtGet('minSdkVersion', 16)
+        targetSdkVersion safeExtGet('targetSdkVersion', 27)
         versionCode 1
         versionName "1.0"
     }
@@ -41,7 +45,17 @@ dependencies {
     implementation 'com.github.prscX:photo-editor-android:master-SNAPSHOT'
     implementation 'fr.avianey.com.viewpagerindicator:library:2.4.1@aar'
     implementation 'com.nineoldandroids:library:2.4.0'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    
+    def supportLibVersion = safeExtGet('supportLibVersion', '27.0.1')
+    def supportLibMajorVersion = supportLibVersion.split('\\.')[0] as int
+    def designLibVersion = safeExtGet('designLibVersion', safeExtGet('supportLibVersion', '17.0.2'))
+    def constraintLayoutLibVersion = safeExtGet('constraintLayoutLibVersion', '1.0.2')
+    
+    def appCompatLibName =  (supportLibMajorVersion < 20) ? "androidx.appcompat:appcompat" : "com.android.support:appcompat-v7"
+    def appDesignLibName =  (supportLibMajorVersion < 20) ? "androidx.recyclerview:recyclerview" : "com.android.support:design"
+    def appConstraintLayoutLibName =  (supportLibMajorVersion < 20) ? "androidx.constraintlayout:constraintlayout" : "com.android.support:appcompat-v7"
+
+    implementation "$appCompatLibName:$supportLibVersion"
+    implementation "$appDesignLibName:$designLibVersion"
+    implementation "$appConstraintLayoutLibName:$constraintLayoutLibVersion"
 }
