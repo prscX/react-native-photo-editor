@@ -19,11 +19,11 @@ RCTResponseSenderBlock _onCancelEditing = nil;
 
     // Save image.
     NSURL *tmpDirURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
-	NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]]] URLByAppendingPathExtension:@"jpg"];
+ 	  NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]]] URLByAppendingPathExtension:@"jpg"];
 
     [UIImageJPEGRepresentation(image, 0.8) writeToURL:fileURL atomically:YES];
 
-	_onDoneEditing(@[[fileURL absoluteString]]);
+	  _onDoneEditing(@[[fileURL absoluteString]]);
 }
 
 - (void)canceledEditing {
@@ -87,7 +87,14 @@ RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBl
         photoEditor.photoEditorDelegate = self;
 
         id<UIApplicationDelegate> app = [[UIApplication sharedApplication] delegate];
-        [((UINavigationController*) app.window.rootViewController) presentViewController:photoEditor animated:YES completion:nil];
+        UINavigationController *rootViewController = ((UINavigationController*) app.window.rootViewController);
+
+        if (rootViewController.presentedViewController) {
+            [rootViewController.presentedViewController presentViewController:photoEditor animated:YES completion:nil];
+            return;
+        }
+
+        [rootViewController presentViewController:photoEditor animated:YES completion:nil];
     });
 }
 
