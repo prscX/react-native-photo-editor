@@ -1184,6 +1184,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
     @Override
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result;
+
         int save = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             save = canvas.saveLayer(null, null);
