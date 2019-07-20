@@ -85,10 +85,12 @@ RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBl
 
         id<UIApplicationDelegate> app = [[UIApplication sharedApplication] delegate];
         UINavigationController *rootViewController = ((UINavigationController*) app.window.rootViewController);
+
         if (rootViewController.presentedViewController) {
             [rootViewController.presentedViewController presentViewController:photoEditor animated:YES completion:nil];
             return;
         }
+
         [rootViewController presentViewController:photoEditor animated:YES completion:nil];
     });
 }
