@@ -56,6 +56,7 @@ import java.util.Date;
 import java.util.List;
 
 import ui.photoeditor.R;
+
 public class PhotoEditorActivity extends AppCompatActivity implements View.OnClickListener, OnPhotoEditorSDKListener {
 
     public static Typeface emojiFont = null;
@@ -86,6 +87,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 1;
         Bitmap bitmap = BitmapFactory.decodeFile(selectedImagePath, options);
+
         Bitmap rotatedBitmap;
         try {
             ExifInterface exif = new ExifInterface(selectedImagePath);
@@ -94,6 +96,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         } catch (IOException e) {
             rotatedBitmap = bitmap;
             imageOrientation = ExifInterface.ORIENTATION_NORMAL;
+
             e.printStackTrace();
         }
 
@@ -412,6 +415,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                             FileOutputStream out = new FileOutputStream(file);
                             if (parentImageRelativeLayout != null) {
                                 parentImageRelativeLayout.setDrawingCacheEnabled(true);
+
                                 Bitmap bitmap = parentImageRelativeLayout.getDrawingCache();
                                 Bitmap rotatedBitmap = rotateBitmap(bitmap, imageOrientation, true);
                                 rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
@@ -419,6 +423,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
                             out.flush();
                             out.close();
+
                             try {
                                 ExifInterface exifDest = new ExifInterface(file.getAbsolutePath());
                                 exifDest.setAttribute(ExifInterface.TAG_ORIENTATION, Integer.toString(imageOrientation));
@@ -694,18 +699,22 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
     private static Bitmap rotateBitmap(Bitmap bitmap, int orientation, boolean reverse) {
         Matrix matrix = new Matrix();
+
         switch (orientation) {
             case ExifInterface.ORIENTATION_NORMAL:
                 return bitmap;
             case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
                 matrix.setScale(-1, 1);
+
                 break;
             case ExifInterface.ORIENTATION_ROTATE_180:
                 matrix.setRotate(180);
+
                 break;
             case ExifInterface.ORIENTATION_FLIP_VERTICAL:
                 matrix.setRotate(180);
                 matrix.postScale(-1, 1);
+
                 break;
             case ExifInterface.ORIENTATION_TRANSPOSE:
                 if (!reverse) {
@@ -713,6 +722,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 } else {
                     matrix.setRotate(-90);
                 }
+
                 matrix.postScale(-1, 1);
                 break;
             case ExifInterface.ORIENTATION_ROTATE_90:
@@ -721,6 +731,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 } else {
                     matrix.setRotate(-90);
                 }
+
                 break;
             case ExifInterface.ORIENTATION_TRANSVERSE:
                 if (!reverse) {
@@ -728,6 +739,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 } else {
                     matrix.setRotate(90);
                 }
+
                 matrix.postScale(-1, 1);
                 break;
             case ExifInterface.ORIENTATION_ROTATE_270:
@@ -736,10 +748,12 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 } else {
                     matrix.setRotate(90);
                 }
+
                 break;
             default:
                 return bitmap;
         }
+
         try {
             Bitmap bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
             bitmap.recycle();
