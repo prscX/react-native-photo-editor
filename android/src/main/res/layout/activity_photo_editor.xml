@@ -137,14 +137,25 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/add_image_emoji_tv"
+                    android:id="@+id/add_crop_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@+id/add_pencil_tv"
                     android:padding="15dp"
+                    android:text="@string/ic_crop"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/add_image_emoji_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@+id/add_crop_tv"
+                    android:padding="15dp"
                     android:text="@string/ic_images"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp" />
+
 
             </RelativeLayout>
 
