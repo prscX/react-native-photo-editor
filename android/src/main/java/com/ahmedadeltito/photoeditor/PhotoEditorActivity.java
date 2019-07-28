@@ -1,7 +1,9 @@
 package com.ahmedadeltito.photoeditor;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,13 +11,17 @@ import android.content.res.Resources;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.media.ExifInterface;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -61,11 +67,13 @@ import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
 import ui.photoeditor.R;
+
 public class PhotoEditorActivity extends AppCompatActivity implements View.OnClickListener, OnPhotoEditorSDKListener {
 
     public static Typeface emojiFont = null;
 
     protected static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_GALLERY = 0x1;
+    final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
     private final String TAG = "PhotoEditorActivity";
     private RelativeLayout parentImageRelativeLayout;
@@ -79,6 +87,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private ArrayList<Integer> colorPickerColors;
     private int colorCodeTextView = -1;
     private PhotoEditorSDK photoEditorSDK;
+    private String selectedImagePath;
+    private int imageOrientation;
 
     // CROP OPTION
     private boolean cropperCircleOverlay = false;
@@ -95,11 +105,27 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_editor);
 
-        selectedImagePath = getIntent().getExtras().getString("selectedImagePath");
+        if (selectedImagePath.contains("content://")) {
+            selectedImagePath = getPath(Uri.parse(selectedImagePath));
+        }
+        Log.d("PhotoEditorSDK", "Selected image path: " + selectedImagePath);
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 1;
         Bitmap bitmap = BitmapFactory.decodeFile(selectedImagePath, options);
+
+        Bitmap rotatedBitmap;
+        try {
+            ExifInterface exif = new ExifInterface(selectedImagePath);
+            imageOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+            rotatedBitmap = rotateBitmap(bitmap, imageOrientation, false);
+        } catch (IOException e) {
+            rotatedBitmap = bitmap;
+            imageOrientation = ExifInterface.ORIENTATION_NORMAL;
+
+            e.printStackTrace();
+        }
+
 
         Typeface newFont = getFontFromRes(R.raw.eventtusicons);
         Typeface fontAwesome = getFontFromRes(R.raw.font_awesome_solid);
@@ -135,7 +161,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         ViewPager pager = (ViewPager) findViewById(R.id.image_emoji_view_pager);
         PageIndicator indicator = (PageIndicator) findViewById(R.id.image_emoji_indicator);
 
-        photoEditImageView.setImageBitmap(bitmap);
+        photoEditImageView.setImageBitmap(rotatedBitmap);
 
         closeTextView.setTypeface(newFont);
         addTextView.setTypeface(newFont);
@@ -425,11 +451,22 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                             FileOutputStream out = new FileOutputStream(file);
                             if (parentImageRelativeLayout != null) {
                                 parentImageRelativeLayout.setDrawingCacheEnabled(true);
-                                parentImageRelativeLayout.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 80, out);
+
+                                Bitmap bitmap = parentImageRelativeLayout.getDrawingCache();
+                                Bitmap rotatedBitmap = rotateBitmap(bitmap, imageOrientation, true);
+                                rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
                             }
 
                             out.flush();
                             out.close();
+
+                            try {
+                                ExifInterface exifDest = new ExifInterface(file.getAbsolutePath());
+                                exifDest.setAttribute(ExifInterface.TAG_ORIENTATION, Integer.toString(imageOrientation));
+                                exifDest.saveAttributes();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         } catch (Exception var7) {
                             var7.printStackTrace();
                         }
@@ -462,19 +499,28 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 String imageName = "/IMG_" + timeStamp + ".jpg";
 
                 // String selectedImagePath = getIntent().getExtras().getString("selectedImagePath");
-                //File file = new File(selectedImagePath);
+                // File file = new File(selectedImagePath);
                 String newPath = getCacheDir() + imageName;
-                File file = new File(newPath);
+	            File file = new File(newPath);
 
                 try {
                     FileOutputStream out = new FileOutputStream(file);
                     if (parentImageRelativeLayout != null) {
                         parentImageRelativeLayout.setDrawingCacheEnabled(true);
-                        parentImageRelativeLayout.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 80, out);
+                        Bitmap bitmap = parentImageRelativeLayout.getDrawingCache();
+                        Bitmap rotatedBitmap = rotateBitmap(bitmap, imageOrientation, true);
+                        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
                     }
 
                     out.flush();
                     out.close();
+                    try {
+                        ExifInterface exifDest = new ExifInterface(file.getAbsolutePath());
+                        exifDest.setAttribute(ExifInterface.TAG_ORIENTATION, Integer.toString(imageOrientation));
+                        exifDest.saveAttributes();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } catch (Exception var7) {
                     var7.printStackTrace();
                 }
@@ -743,6 +789,129 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             } else {
                 System.out.println("NO RESULT");
             }
+        }
+    }
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    protected String getPath(final Uri uri) {
+        // DocumentProvider
+        if (isKitKat && DocumentsContract.isDocumentUri(this, uri)) {
+            // ExternalStorageProvider
+            if (GalleryUtils.isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/"
+                            + split[1];
+                }
+            }
+            // DownloadsProvider
+            else if (GalleryUtils.isDownloadsDocument(uri)) {
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"),
+                        Long.valueOf(id));
+                return GalleryUtils.getDataColumn(this, contentUri, null, null);
+            }
+            // MediaProvider
+            else if (GalleryUtils.isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[]{split[1]};
+
+                return GalleryUtils.getDataColumn(this, contentUri, selection,
+                        selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            return GalleryUtils.getDataColumn(this, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
+    }
+
+    private static Bitmap rotateBitmap(Bitmap bitmap, int orientation, boolean reverse) {
+        Matrix matrix = new Matrix();
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_NORMAL:
+                return bitmap;
+            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                matrix.setScale(-1, 1);
+
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+
+                break;
+            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                matrix.setRotate(180);
+                matrix.postScale(-1, 1);
+
+                break;
+            case ExifInterface.ORIENTATION_TRANSPOSE:
+                if (!reverse) {
+                    matrix.setRotate(90);
+                } else {
+                    matrix.setRotate(-90);
+                }
+
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                if (!reverse) {
+                    matrix.setRotate(90);
+                } else {
+                    matrix.setRotate(-90);
+                }
+
+                break;
+            case ExifInterface.ORIENTATION_TRANSVERSE:
+                if (!reverse) {
+                    matrix.setRotate(-90);
+                } else {
+                    matrix.setRotate(90);
+                }
+
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                if (!reverse) {
+                    matrix.setRotate(-90);
+                } else {
+                    matrix.setRotate(90);
+                }
+
+                break;
+            default:
+                return bitmap;
+        }
+
+        try {
+            Bitmap bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            bitmap.recycle();
+
+            return bmRotated;
+        } catch (OutOfMemoryError e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

@@ -16,30 +16,30 @@ RCTResponseSenderBlock _onCancelEditing = nil;
 
 - (void)doneEditingWithImage:(UIImage *)image {
     if (_onDoneEditing == nil) return;
-    
+
     // Save image.
     NSURL *tmpDirURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
-    NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]]] URLByAppendingPathExtension:@"jpg"];
-    
+ 	  NSURL *fileURL = [[tmpDirURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]]] URLByAppendingPathExtension:@"jpg"];
+
     [UIImageJPEGRepresentation(image, 0.8) writeToURL:fileURL atomically:YES];
-    
-    _onDoneEditing(@[[fileURL absoluteString]]);
+
+	  _onDoneEditing(@[[fileURL absoluteString]]);
 }
 
 - (void)canceledEditing {
     if (_onCancelEditing == nil) return;
-        
+
     _onCancelEditing(@[]);
 }
 
 RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBlock)onDone onCancel:(RCTResponseSenderBlock)onCancel) {
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         _editImagePath = [props objectForKey: @"path"];
-        
+
         _onDoneEditing = onDone;
         _onCancelEditing = onCancel;
-        
+
         PhotoEditorViewController *photoEditor = [[PhotoEditorViewController alloc] initWithNibName:@"PhotoEditorViewController" bundle: [NSBundle bundleForClass:[PhotoEditorViewController class]]];
 
         // Process Image for Editing
@@ -50,9 +50,9 @@ RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBl
 
             image = [UIImage imageWithData:data];
         }
-        
+
         photoEditor.image = image;
-        
+
         // Process Stickers
         NSArray *stickers = [props objectForKey: @"stickers"];
         NSMutableArray *imageStickers = [[NSMutableArray alloc] initWithCapacity:stickers.count];
@@ -62,16 +62,16 @@ RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBl
         }
 
         photoEditor.stickers = imageStickers;
-        
+
         //Process Controls
         NSArray *hiddenControls = [props objectForKey: @"hiddenControls"];
         NSMutableArray *passHiddenControls = [[NSMutableArray alloc] initWithCapacity:hiddenControls.count];
-        
+
         for (NSString *hiddenControl in hiddenControls) {
             [passHiddenControls addObject: [[NSString alloc] initWithString: hiddenControl]];
         }
-        
-        photoEditor.hiddenControls = passHiddenControls;
+
+        // photoEditor.hiddenControls = passHiddenControls;
 
         //Process Colors
         NSArray *colors = [props objectForKey: @"colors"];
@@ -80,14 +80,21 @@ RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBl
         for (NSString *color in colors) {
             [passColors addObject: [self colorWithHexString: color]];
         }
-        
+
         photoEditor.colors = passColors;
 
         // Invoke Editor
         photoEditor.photoEditorDelegate = self;
 
         id<UIApplicationDelegate> app = [[UIApplication sharedApplication] delegate];
-        [((UINavigationController*) app.window.rootViewController) presentViewController:photoEditor animated:YES completion:nil];
+        UINavigationController *rootViewController = ((UINavigationController*) app.window.rootViewController);
+
+        if (rootViewController.presentedViewController) {
+            [rootViewController.presentedViewController presentViewController:photoEditor animated:YES completion:nil];
+            return;
+        }
+
+        [rootViewController presentViewController:photoEditor animated:YES completion:nil];
     });
 }
 
@@ -136,4 +143,3 @@ RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBl
 
 
 @end
-  
