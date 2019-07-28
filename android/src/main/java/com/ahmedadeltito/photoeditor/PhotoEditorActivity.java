@@ -96,8 +96,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private boolean showCropGuidelines = true;
     private boolean hideBottomControls = false;
 
-    String selectedImagePath = "";
-    ImageView photoEditImageView;
+    private ImageView photoEditImageView;
 
 
     @Override
