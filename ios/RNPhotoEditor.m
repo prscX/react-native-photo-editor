@@ -20,7 +20,7 @@ RCTResponseSenderBlock _onCancelEditing = nil;
     // Save image.
     [UIImagePNGRepresentation(image) writeToFile:_editImagePath atomically:YES];
     
-    _onDoneEditing(@[_editImagePath]);
+    _onDoneEditing(@[]);
 }
 
 - (void)canceledEditing {

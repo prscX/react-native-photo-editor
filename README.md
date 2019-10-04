@@ -31,7 +31,56 @@ This library is a React Native bridge around native photo editor libraries. It a
 
 ## 📖 Getting started
 
-`$ npm install react-native-photo-editor --save`
+`$ yarn add react-native-photo-editor`
+
+## **RN60 >= RNPE V1 >**
+
+> RN60 above please use `react-native-photo-editor` V1 and above
+
+- **iOS**
+
+> **iOS Prerequisite:** Please make sure `CocoaPods` is installed on your system
+
+	- Add the following to your `Podfile` -> `ios/Podfile` and run pod update:
+
+```
+  use_native_modules!
+
+  pod 'RNPhotoEditor', :path => '../node_modules/react-native-photo-editor/ios'
+
+  use_frameworks!
+
+  pod 'iOSPhotoEditor', :git => 'https://github.com/prscX/photo-editor', :branch => 'master'
+```
+
+  - Add below property to your info.list
+
+```
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Application needs permission to write photos...</string>
+
+	<!-- If you are targeting devices running on iOS 10 or later, you'll also need to add: -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>iOS 10 needs permission to write photos...</string>
+```
+
+- **Android**
+
+- Add below activity in your app activites:
+
+`
+<activity android:name="com.ahmedadeltito.photoeditor.PhotoEditorActivity" />
+<activity android:name="com.yalantis.ucrop.UCropActivity" />
+`
+
+- To save image to the public external storage, you must request the WRITE_EXTERNAL_STORAGE permission in your manifest file:
+
+`<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />`
+
+
+## **RN60 < RNPE V1 <**
+
+> RN60 below please use `react-native-photo-editor` V.0.*
 
 `$ react-native link react-native-photo-editor`
 
@@ -75,7 +124,10 @@ android {
 
 - Add below activity in your app activites:
 
-`<activity android:name="com.ahmedadeltito.photoeditor.PhotoEditorActivity" />`
+`
+<activity android:name="com.ahmedadeltito.photoeditor.PhotoEditorActivity" />
+<activity android:name="com.yalantis.ucrop.UCropActivity" />
+`
 
 - To save image to the public external storage, you must request the WRITE_EXTERNAL_STORAGE permission in your manifest file:
 
