@@ -20,17 +20,17 @@ import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.media.ExifInterface;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.PermissionChecker;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.exifinterface.media.ExifInterface;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.core.content.PermissionChecker;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -104,6 +104,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_editor);
 
+        selectedImagePath = getIntent().getExtras().getString("selectedImagePath");	
         if (selectedImagePath.contains("content://")) {
             selectedImagePath = getPath(Uri.parse(selectedImagePath));
         }
@@ -497,10 +498,10 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 String imageName = "/IMG_" + timeStamp + ".jpg";
 
-                // String selectedImagePath = getIntent().getExtras().getString("selectedImagePath");
-                // File file = new File(selectedImagePath);
-                String newPath = getCacheDir() + imageName;
-	            File file = new File(newPath);
+                 String selectedImagePath = getIntent().getExtras().getString("selectedImagePath");
+                 File file = new File(selectedImagePath);
+//                String newPath = getCacheDir() + imageName;
+//	            File file = new File(newPath);
 
                 try {
                     FileOutputStream out = new FileOutputStream(file);
@@ -525,7 +526,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 }
 
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("imagePath", newPath);
+                returnIntent.putExtra("imagePath", selectedImagePath);
                 setResult(Activity.RESULT_OK, returnIntent);
 
                 finish();
