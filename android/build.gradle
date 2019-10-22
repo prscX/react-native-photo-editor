@@ -8,9 +8,9 @@ def DEFAULT_MIN_SDK_VERSION       = 16
 buildscript {
     repositories {
         google()
-        maven { url 'https://jitpack.io' }
         maven { url "https://maven.google.com" }
         jcenter()
+        maven { url 'https://www.jitpack.io' }
     }
 
     dependencies {
