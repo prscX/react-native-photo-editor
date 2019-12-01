@@ -76,7 +76,26 @@ This library is a React Native bridge around native photo editor libraries. It a
 
 - **Android**
 
-- Add below activity in your app activites:
+- Please add below script in your build.gradle
+
+```
+buildscript {
+    repositories {
+        maven { url "https://jitpack.io" }
+        ...
+    }
+}
+
+allprojects {
+    repositories {
+        maven { url "https://jitpack.io" }
+        ...
+    }
+}
+```
+
+
+- Add below activity in your app activities:
 
 `
 <activity android:name="com.ahmedadeltito.photoeditor.PhotoEditorActivity" />
