@@ -205,6 +205,9 @@ RNPhotoEditor.Edit({
 });
 ```
 
+> * Purpose of this library is to edit photos which are within app sandbox, we recommend to move captured image to app sandbox then using RNFS share image path with library for the edit.
+
+> * Example: If we capture image through cameraRoll then we should first move image to app sandbox using RNFS then share app storage path with the editor.
 
 ## 💡 Props
 
