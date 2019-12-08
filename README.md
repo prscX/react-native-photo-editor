@@ -33,7 +33,7 @@ This library is a React Native bridge around native photo editor libraries. It a
 
 `$ yarn add react-native-photo-editor`
 
-## **RN60 >= RNPE V1 >**
+## **RN61 >= RNPE V1 >**
 
 > RN60 above please use `react-native-photo-editor` V1 and above
 
@@ -107,7 +107,7 @@ allprojects {
 `<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />`
 
 
-## **RN60 < RNPE V1 <**
+## **RN61 < RNPE V1 <**
 
 > RN60 below please use `react-native-photo-editor` V.0.*
 
