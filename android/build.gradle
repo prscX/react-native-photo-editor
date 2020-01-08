@@ -1,30 +1,33 @@
 apply plugin: 'com.android.library'
 
-def DEFAULT_COMPILE_SDK_VERSION   = 28
-def DEFAULT_BUILD_TOOLS_VERSION   = "28.0.3"
-def DEFAULT_TARGET_SDK_VERSION    = 28
-def DEFAULT_MIN_SDK_VERSION       = 16
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
 
 buildscript {
-    repositories {
-        google()
-        maven { url "https://maven.google.com" }
-        jcenter()
-        maven { url 'https://www.jitpack.io' }
-    }
+    // The Android Gradle plugin is only required when opening the android folder stand-alone.
+    // This avoids unnecessary downloads and potential conflicts when the library is included as a
+    // module dependency in an application project.
+    if (project == rootProject) {
+        repositories {
+            google()
+            jcenter()
+            maven { url 'https://www.jitpack.io' }
+        }
 
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        dependencies {
+            classpath("com.android.tools.build:gradle:3.5.3")
+        }
     }
 }
 
 android {
-    compileSdkVersion rootProject.ext.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
-    buildToolsVersion rootProject.ext.hasProperty('buildToolsVersion') ? rootProject.ext.buildToolsVersion : DEFAULT_BUILD_TOOLS_VERSION
+    compileSdkVersion safeExtGet('compileSdkVersion', 28)
+    buildToolsVersion safeExtGet('buildToolsVersion', '28.0.3')
 
     defaultConfig {
-        minSdkVersion rootProject.ext.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : DEFAULT_MIN_SDK_VERSION
-        targetSdkVersion rootProject.ext.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : DEFAULT_TARGET_SDK_VERSION
+        minSdkVersion safeExtGet('minSdkVersion', 16)
+        targetSdkVersion safeExtGet('targetSdkVersion', 28)
         versionCode 1
         versionName "1.0"
     }
@@ -36,7 +39,6 @@ android {
 repositories {
     google()
     mavenCentral()
-    maven { url "https://maven.google.com" }
     maven { url 'https://www.jitpack.io' }
 }
 
