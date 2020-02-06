@@ -62,6 +62,7 @@ This library is a React Native bridge around native photo editor libraries. It a
     end
   end
 ```
+  - If using React Native Firebase v6+, please see `Troubleshooting` section for a known issue before moving further.
 
   - Add below property to your info.list
 
@@ -222,6 +223,26 @@ RNPhotoEditor.Edit({
 | `onDone`    | `func` |         | Specify done callback            |
 | `onCancel`        | `func`            |      | Specify cancel callback       |
 
+## 🔧 Troubleshooting
+### If using React Native Firebase v6+ or facing any of the following issues: [#104](https://github.com/prscX/react-native-photo-editor/issues/104), [#93](https://github.com/prscX/react-native-photo-editor/issues/93)
+  - Add the following to your `podfile -> ios/podfile` and run `pod install`
+```
+pre_install do |installer|
+  installer.pod_targets.each do |pod|
+    if pod.name.start_with?('RNFB')
+      def pod.build_type;
+        Pod::Target::BuildType.static_library
+      end
+    end
+  end
+end
+```
+
+  - If the above doesn't work, try the following and and re-run `pod install`:
+```
+1. Open .podspec in node_modules/@react-native-firebase/app, auth, firestore (and any other @react-native-firebase libraries you're using)
+2. Manually change s.static_framework = false to s.static_framework = true.
+```
 
 ## ✨ Credits
 
