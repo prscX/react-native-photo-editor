@@ -2,7 +2,7 @@
     "name": "react-native-photo-editor",
     "version": "1.0.5",
     "description": "React Native: Native Photo Editor",
-    "main": "RNPhotoEditor.js",
+    "main": "index.tsx",
     "homepage": "https://github.com/prscX/react-native-photo-editor.git",
     "repository": {
         "type": "git",

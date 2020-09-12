@@ -283,18 +283,12 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 clearAllTextView.setVisibility(View.INVISIBLE);
                 clearAllTextTextView.setVisibility(View.INVISIBLE);
             }
-            if (hiddenControls.get(i).toString().equalsIgnoreCase("crop")) {
-
-            }
             if (hiddenControls.get(i).toString().equalsIgnoreCase("draw")) {
                 addPencil.setVisibility(View.INVISIBLE);
             }
             if (hiddenControls.get(i).toString().equalsIgnoreCase("save")) {
                 saveTextTextView.setVisibility(View.INVISIBLE);
                 saveTextView.setVisibility(View.INVISIBLE);
-            }
-            if (hiddenControls.get(i).toString().equalsIgnoreCase("share")) {
-
             }
             if (hiddenControls.get(i).toString().equalsIgnoreCase("sticker")) {
                 addImageEmojiTextView.setVisibility(View.INVISIBLE);

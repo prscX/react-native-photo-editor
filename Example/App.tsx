@@ -1,24 +1,22 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
-import {RNPhotoEditor} from 'react-native-photo-editor';
+import {Image} from 'react-native';
+import PhotoEditor from 'react-native-photo-editor';
 import RNFS from 'react-native-fs';
 import RNFetchBlob from 'rn-fetch-blob';
 
-import photo from './assets/photo.jpg';
-
 type Props = {
-  colors?: Array<string>;
-  hiddenControls?: Array<string>;
-  onCancel?: (e: any) => void;
-  onDone?: (e: any) => void;
   path: string;
-  stickers?: Array<string>;
+  colors?: string[];
+  stickers?: string[];
+  hiddenControls?: string[];
+  onDone?: (e: any) => void;
+  onCancel?: (e: any) => void;
 };
 
 export default class App extends Component<Props> {
   _onPress = () => {
-    RNPhotoEditor.Edit({
+    PhotoEditor.Edit({
       path: RNFS.DocumentDirectoryPath + '/photo.jpg',
       stickers: [
         'sticker0',
@@ -33,7 +31,15 @@ export default class App extends Component<Props> {
         'sticker9',
         'sticker10',
       ],
-      //   hiddenControls: ['clear', 'crop', 'draw', 'save', 'share', 'sticker', 'text'],
+      // hiddenControls: [
+      //   'clear',
+      //   'crop',
+      //   'draw',
+      //   'save',
+      //   'share',
+      //   'sticker',
+      //   'text',
+      // ],
       colors: undefined,
       onDone: () => {
         console.log('on done');
@@ -46,11 +52,11 @@ export default class App extends Component<Props> {
 
   componentDidMount() {
     let photoPath = RNFS.DocumentDirectoryPath + '/photo.jpg';
-    let binaryFile = resolveAssetSource(photo);
+    let binaryFile = Image.resolveAssetSource(require('./assets/photo.jpg'));
 
     RNFetchBlob.config({fileCache: true})
       .fetch('GET', binaryFile.uri)
-      .then((resp) => {
+      .then((resp: {path: () => string}) => {
         RNFS.moveFile(resp.path(), photoPath)
           .then(() => {
             console.log('FILE WRITTEN!');
@@ -59,7 +65,7 @@ export default class App extends Component<Props> {
             console.log(err.message);
           });
       })
-      .catch((err) => {
+      .catch((err: {message: any}) => {
         console.log(err.message);
       });
   }
