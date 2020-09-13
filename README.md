@@ -48,7 +48,7 @@ This library is a React Native bridge around native photo editor libraries. It a
 
   pod 'RNPhotoEditor', :path => '../node_modules/react-native-photo-editor/ios'
 
-  use_frameworks!
+  use_frameworks! :linkage => :static
 
   pod 'iOSPhotoEditor', :git => 'https://github.com/prscX/photo-editor', :branch => 'master'
 
@@ -61,7 +61,29 @@ This library is a React Native bridge around native photo editor libraries. It a
       end
     end
   end
+
+  # Follow [Flipper iOS Setup Guidelines](https://fbflipper.com/docs/getting-started/ios-native)
+  # This is required because iOSPhotoEditor is implemented using Swift and we have to use use_frameworks! in Podfile
+  $static_framework = ['FlipperKit', 'Flipper', 'Flipper-Folly',
+    'CocoaAsyncSocket', 'ComponentKit', 'Flipper-DoubleConversion',
+    'Flipper-Glog', 'Flipper-PeerTalk', 'Flipper-RSocket', 'Yoga', 'YogaKit',
+    'CocoaLibEvent', 'OpenSSL-Universal', 'boost-for-react-native']
+  
+  pre_install do |installer|
+    Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+    installer.pod_targets.each do |pod|
+        if $static_framework.include?(pod.name)
+          def pod.build_type;
+            Pod::BuildType.static_library
+          end
+        end
+      end
+  end
+
 ```
+
+  - Please make sure [**Flipper iOS Setup Guidelines**](https://fbflipper.com/docs/getting-started/ios-native/) steps are added to Podfile, since iOSPhotoEditor is implemented using Swift and we have to use use_frameworks! in Podfile
+
   - If using React Native Firebase v6+, please see `Troubleshooting` section for a known issue before moving further.
 
   - Add below property to your info.list

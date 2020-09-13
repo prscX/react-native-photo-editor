@@ -8,16 +8,16 @@ target 'Example' do
 
   use_react_native!(:path => config["reactNativePath"])
 
-  target 'ExampleTests' do
-    inherit! :complete
-    # Pods for testing
-  end
+  use_frameworks! :linkage => :static
+
+  pod 'iOSPhotoEditor', :git => 'https://github.com/prscX/photo-editor', :branch => 'master'
 
   # Enables Flipper.
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
   use_flipper!
+
   post_install do |installer|
     flipper_post_install(installer)
 
@@ -29,13 +29,22 @@ target 'Example' do
       end
     end
   end
-end
 
-target 'Example-tvOS' do
-  # Pods for Example-tvOS
-
-  target 'Example-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
+  # Follow [Flipper iOS Setup Guidelines][https://fbflipper.com/docs/getting-started/ios-native/]
+  # This is required because iOSPhotoEditor is implementated using Swift
+  $static_framework = ['FlipperKit', 'Flipper', 'Flipper-Folly',
+    'CocoaAsyncSocket', 'ComponentKit', 'Flipper-DoubleConversion',
+    'Flipper-Glog', 'Flipper-PeerTalk', 'Flipper-RSocket', 'Yoga', 'YogaKit',
+    'CocoaLibEvent', 'OpenSSL-Universal', 'boost-for-react-native', 'RNRichText']
+  
+  pre_install do |installer|
+    Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+    installer.pod_targets.each do |pod|
+        if $static_framework.include?(pod.name)
+          def pod.build_type;
+            Pod::BuildType.static_library
+          end
+        end
+      end
   end
 end
