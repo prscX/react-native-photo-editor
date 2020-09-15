@@ -221,9 +221,9 @@ If you want stickers, please add them to your native project:
 ## 💻 Usage
 
 ```
-import { RNPhotoEditor } from 'react-native-photo-editor'
+import PhotoEditor from 'react-native-photo-editor'
 
-RNPhotoEditor.Edit({
+PhotoEditor.Edit({
     path: RNFS.DocumentDirectoryPath + "/photo.jpg"
 });
 ```
