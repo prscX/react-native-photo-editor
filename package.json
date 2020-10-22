@@ -3,6 +3,7 @@
     "version": "1.0.8",
     "description": "React Native: Native Photo Editor",
     "main": "index.tsx",
+    "types": "index.d.ts",
     "homepage": "https://github.com/prscX/react-native-photo-editor.git",
     "repository": {
         "type": "git",

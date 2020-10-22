@@ -53,10 +53,10 @@ export default class PhotoEditor {
 
         RNPhotoEditor.Edit(
             { colors, hiddenControls, stickers, ...props },
-            (imagePath) => {
+            (imagePath: string) => {
                 onDone && onDone(imagePath)
             },
-            (resultCode) => {
+            (resultCode: number) => {
                 onCancel && onCancel(resultCode)
             }
         )
