@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">PhotoEditor</string>
+    <string name="title_activity_photo_editor">PhotoEditorActivity</string>
+    <string name="done">Terminé</string>
+    <string name="save">Sauvegarder</string>
+    <string name="clear_all">Nettoyer</string>
+    <string name="camera">App. Photo</string>
+    <string name="gallery">Gallerie</string>
+    <string name="upload_dialog_title">Charger une image</string>
+    <string name="upload_picker_title">Sélectionner une image</string>
+    <string name="directory_create_fail">Impossible de créer le dossier</string>
+    <string name="access_media_permissions_msg">Nous avons besoin de la persmission pour accéder à vos photos</string>
+    <string name="continue_txt">Continuer</string>
+    <string name="not_now">Pas maintenant</string>
+    <string name="media_access_denied_msg">Vous avez bloqué la permission, aucune photo ne sera sauvegardée</string>
+    <string name="save_image_succeed">Image sauvegardée</string>
+
+    <string name="ic_close">"\ue918"</string>
+    <string name="ic_text">"\ue945"</string>
+    <string name="ic_draw">""\ue944</string>
+    <string name="ic_images">"\ue949"</string>
+    <string name="ic_save">"\ue946"</string>
+    <string name="ic_clear_all">"\ue947"</string>
+    <string name="ic_continue">"\ue948"</string>
+    <string name="ic_delete">"\ue92c"</string>
+    <string name="ic_crop">&#xf565;</string>
+    <string name="choose_from_gallery">Choisir depuis la gallerie</string>
+    <string name="choose_from_camera">Prendre avec l'App. Photo</string>
+    <string name="undo">Retour</string>
+    <string name="erase">Effacer</string>
+
+</resources>
