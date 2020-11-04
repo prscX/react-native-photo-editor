@@ -25,7 +25,7 @@
     <string name="ic_delete">"\ue92c"</string>
     <string name="ic_crop">&#xf565;</string>
     <string name="choose_from_gallery">Choisir depuis la gallerie</string>
-    <string name="choose_from_camera">Prendre avec l'App. Photo</string>
+    <string name="choose_from_camera">Prendre avec l\'App. Photo</string>
     <string name="undo">Retour</string>
     <string name="erase">Effacer</string>
 
