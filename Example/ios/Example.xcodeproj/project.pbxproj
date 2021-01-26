@@ -11,6 +11,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3A87863AE18BCBD4C9E92190 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A1BF68F5D67B0CEA3E9CE31 /* Pods_Example.framework */; };
+		81612E5A25C01331007A8021 /* Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81612E5925C01331007A8021 /* Swift.swift */; };
 		816895DF250E0D1900643F29 /* sticker9.png in Resources */ = {isa = PBXBuildFile; fileRef = 816895D4250E0D1900643F29 /* sticker9.png */; };
 		816895E0250E0D1900643F29 /* sticker8.png in Resources */ = {isa = PBXBuildFile; fileRef = 816895D5250E0D1900643F29 /* sticker8.png */; };
 		816895E1250E0D1900643F29 /* sticker10.png in Resources */ = {isa = PBXBuildFile; fileRef = 816895D6250E0D1900643F29 /* sticker10.png */; };
@@ -34,6 +35,8 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Example/main.m; sourceTree = "<group>"; };
 		528859A07D9BCE776D61B066 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		7A1BF68F5D67B0CEA3E9CE31 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		81612E5825C01331007A8021 /* Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Example-Bridging-Header.h"; sourceTree = "<group>"; };
+		81612E5925C01331007A8021 /* Swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Swift.swift; path = Example/Swift.swift; sourceTree = "<group>"; };
 		816895D4250E0D1900643F29 /* sticker9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker9.png; sourceTree = "<group>"; };
 		816895D5250E0D1900643F29 /* sticker8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker8.png; sourceTree = "<group>"; };
 		816895D6250E0D1900643F29 /* sticker10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sticker10.png; sourceTree = "<group>"; };
@@ -71,6 +74,8 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				81612E5925C01331007A8021 /* Swift.swift */,
+				81612E5825C01331007A8021 /* Example-Bridging-Header.h */,
 			);
 			name = Example;
 			sourceTree = "<group>";
@@ -175,7 +180,7 @@
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1230;
 					};
 				};
 			};
@@ -322,6 +327,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				81612E5A25C01331007A8021 /* Swift.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -346,6 +352,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Example;
+				SWIFT_OBJC_BRIDGING_HEADER = "Example-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -368,6 +375,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Example;
+				SWIFT_OBJC_BRIDGING_HEADER = "Example-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

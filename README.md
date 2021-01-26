@@ -267,6 +267,8 @@ As [@react-native-firebase documentation](https://rnfirebase.io/#allow-ios-stati
 $RNFirebaseAsStaticFramework = true
 ```
 
+### [__swift_FORCE_LOAD_$_swiftUniformTypeIdentifiers / __swift_FORCE_LOAD_$_swiftCoreMIDI](https://github.com/prscX/react-native-photo-editor/issues/171)
+
 ## ✨ Credits
 
 - Android Photo Editor: [eventtus/photo-editor-android](https://github.com/eventtus/photo-editor-android)
