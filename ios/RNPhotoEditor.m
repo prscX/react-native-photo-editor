@@ -16,7 +16,7 @@ RCTResponseSenderBlock _onCancelEditing = nil;
 
 - (void)doneEditingWithImage:(UIImage *)image {
     if (_onDoneEditing == nil) return;
-    
+
     NSError* error;
 
     BOOL isPNG = [_editImagePath.pathExtension.lowercaseString isEqualToString:@"png"];
@@ -30,9 +30,9 @@ RCTResponseSenderBlock _onCancelEditing = nil;
     [isPNG ? UIImagePNGRepresentation(image) : UIImageJPEGRepresentation(image, 0.8) writeToFile:path options:NSDataWritingAtomic error:&error];
 
     if (error != nil)
-        NSLog(@"write error %@", error); 
-   
-    _onDoneEditing(@[]);
+        NSLog(@"write error %@", error);
+
+    _onDoneEditing(@[path]);
 }
 
 - (void)canceledEditing {
@@ -94,7 +94,7 @@ RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBl
 
         // Invoke Editor
         photoEditor.photoEditorDelegate = self;
-	
+
 	// The default modal presenting is page sheet in ios 13, not full screen
 	if (@available(iOS 13, *)) {
             [photoEditor setModalPresentationStyle: UIModalPresentationFullScreen];

@@ -253,7 +253,7 @@ pre_install do |installer|
   installer.pod_targets.each do |pod|
     if pod.name.start_with?('RNFB')
       def pod.build_type;
-        Pod::Target::BuildType.static_library
+        Pod::BuildType.static_library
       end
     end
   end
@@ -261,9 +261,10 @@ end
 ```
 
   - If the above doesn't work, try the following and and re-run `pod install`:
+
+As [@react-native-firebase documentation](https://rnfirebase.io/#allow-ios-static-frameworks) you should add following to top of the Podfile for Allow iOS Static Frameworks
 ```
-1. Open .podspec in node_modules/@react-native-firebase/app, auth, firestore (and any other @react-native-firebase libraries you're using)
-2. Manually change s.static_framework = false to s.static_framework = true.
+$RNFirebaseAsStaticFramework = true
 ```
 
 ## ✨ Credits
