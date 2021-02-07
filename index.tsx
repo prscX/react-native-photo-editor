@@ -4,8 +4,10 @@ const { RNPhotoEditor } = NativeModules
 
 export interface PhotoEditorProps {
     path: string
+    mulptipleStickers?: boolean
     colors?: string[]
-    stickers?: string[]
+    stickersTitle?: string[]
+    stickers?: any[]
     hiddenControls?: ('text' | 'clear' | 'draw' | 'save' | 'share' | 'sticker' | 'crop')[]
 
     onDone?: (imagePath: string) => void
@@ -16,6 +18,8 @@ export default class PhotoEditor {
     private static defaultProps = {
         stickers: [],
         hiddenControls: [],
+        stickersTitle: [],
+        mulptipleStickers: false,
         colors: [
             '#000000',
             '#808080',
@@ -39,6 +43,8 @@ export default class PhotoEditor {
         colors,
         onDone,
         onCancel,
+        mulptipleStickers,
+        stickersTitle,
         ...props
     }: PhotoEditorProps) {
         if (stickers === undefined) {
@@ -50,9 +56,15 @@ export default class PhotoEditor {
         if (colors === undefined) {
             colors = this.defaultProps.colors
         }
+        if (stickersTitle === undefined) {
+            stickersTitle = this.defaultProps.stickersTitle
+        }
+        if (mulptipleStickers === undefined) {
+            mulptipleStickers = this.defaultProps.mulptipleStickers
+        }
 
         RNPhotoEditor.Edit(
-            { colors, hiddenControls, stickers, ...props },
+            { colors, hiddenControls, stickers, mulptipleStickers, stickersTitle, ...props },
             (imagePath: string) => {
                 onDone && onDone(imagePath)
             },

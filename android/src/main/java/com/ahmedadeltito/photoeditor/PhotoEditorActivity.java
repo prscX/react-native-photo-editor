@@ -57,6 +57,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -90,6 +91,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private PhotoEditorSDK photoEditorSDK;
     private String selectedImagePath;
     private int imageOrientation;
+    private boolean isMulptipleStickers;
 
     // CROP OPTION
     private boolean cropperCircleOverlay = false;
@@ -179,19 +181,40 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
         final List<Fragment> fragmentsList = new ArrayList<>();
 
-        ImageFragment imageFragment = new ImageFragment();
         ArrayList stickers = (ArrayList<Integer>) getIntent().getExtras().getSerializable("stickers");
+        ArrayList<String> stickersTitle = getIntent().getExtras().getStringArrayList("stickersTitle");
+
+        Boolean mulptipleStickers = getIntent().getExtras().getBoolean("mulptipleStickers");
+        isMulptipleStickers = mulptipleStickers;
+
         if (stickers != null && stickers.size() > 0) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("stickers", stickers);
 
-            imageFragment.setArguments(bundle);
+           if(mulptipleStickers) {
+
+               for (int k = 0;k < stickers.size();k++) {
+                   ImageFragment imageFragment = new ImageFragment();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("stickers", (Serializable) stickers.get(k));
+                    if(!stickersTitle.isEmpty()) {
+                        bundle.putSerializable("stickersTitle", stickersTitle.get(k));
+                    }
+
+                    imageFragment.setArguments(bundle);
+                    fragmentsList.add(imageFragment);
+                }
+            } else {
+               ImageFragment imageFragment = new ImageFragment();
+
+               Bundle bundle = new Bundle();
+               bundle.putSerializable("stickers", stickers);
+               imageFragment.setArguments(bundle);
+               fragmentsList.add(imageFragment);
+
+               EmojiFragment emojiFragment = new EmojiFragment();
+               fragmentsList.add(emojiFragment);
+           }
         }
-
-        fragmentsList.add(imageFragment);
-
-        EmojiFragment emojiFragment = new EmojiFragment();
-        fragmentsList.add(emojiFragment);
 
         PreviewSlidePagerAdapter adapter = new PreviewSlidePagerAdapter(getSupportFragmentManager(), fragmentsList);
         pager.setAdapter(adapter);
@@ -215,10 +238,14 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void onPageSelected(int position) {
-                if (position == 0)
+                if(isMulptipleStickers) {
                     mLayout.setScrollableView(((ImageFragment) fragmentsList.get(position)).imageRecyclerView);
-                else if (position == 1)
-                    mLayout.setScrollableView(((EmojiFragment) fragmentsList.get(position)).emojiRecyclerView);
+                } else {
+                    if (position == 0)
+                        mLayout.setScrollableView(((ImageFragment) fragmentsList.get(position)).imageRecyclerView);
+                    else if (position == 1)
+                        mLayout.setScrollableView(((EmojiFragment) fragmentsList.get(position)).emojiRecyclerView);
+                }
             }
 
             @Override
@@ -691,7 +718,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
         @Override
         public int getCount() {
-            return 2;
+            return mFragments.size();
         }
     }
 
