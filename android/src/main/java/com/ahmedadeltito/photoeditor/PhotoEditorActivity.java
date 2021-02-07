@@ -195,7 +195,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("stickers", (Serializable) stickers.get(k));
-                    if(!stickersTitle.isEmpty()) {
+                    if(!stickersTitle.isEmpty() && stickersTitle.size() > k) {
                         bundle.putSerializable("stickersTitle", stickersTitle.get(k));
                     }
 
