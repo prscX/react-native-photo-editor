@@ -187,9 +187,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         Boolean mulptipleStickers = getIntent().getExtras().getBoolean("mulptipleStickers");
         isMulptipleStickers = mulptipleStickers;
 
-        if (stickers != null && stickers.size() > 0) {
+        if (stickers != null && stickers.size() > 0 && mulptipleStickers) {
 
-           if(mulptipleStickers) {
 
                for (int k = 0;k < stickers.size();k++) {
                    ImageFragment imageFragment = new ImageFragment();
@@ -203,17 +202,16 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                     imageFragment.setArguments(bundle);
                     fragmentsList.add(imageFragment);
                 }
-            } else {
-               ImageFragment imageFragment = new ImageFragment();
+        } else {
+            ImageFragment imageFragment = new ImageFragment();
 
-               Bundle bundle = new Bundle();
-               bundle.putSerializable("stickers", stickers);
-               imageFragment.setArguments(bundle);
-               fragmentsList.add(imageFragment);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("stickers", stickers);
+            imageFragment.setArguments(bundle);
+            fragmentsList.add(imageFragment);
 
-               EmojiFragment emojiFragment = new EmojiFragment();
-               fragmentsList.add(emojiFragment);
-           }
+            EmojiFragment emojiFragment = new EmojiFragment();
+            fragmentsList.add(emojiFragment);
         }
 
         PreviewSlidePagerAdapter adapter = new PreviewSlidePagerAdapter(getSupportFragmentManager(), fragmentsList);

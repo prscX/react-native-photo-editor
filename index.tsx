@@ -4,7 +4,6 @@ const { RNPhotoEditor } = NativeModules
 
 export interface PhotoEditorProps {
     path: string
-    mulptipleStickers?: boolean
     colors?: string[]
     stickersTitle?: string[]
     stickers?: any[]
@@ -19,7 +18,6 @@ export default class PhotoEditor {
         stickers: [],
         hiddenControls: [],
         stickersTitle: [],
-        mulptipleStickers: false,
         colors: [
             '#000000',
             '#808080',
@@ -43,12 +41,14 @@ export default class PhotoEditor {
         colors,
         onDone,
         onCancel,
-        mulptipleStickers,
         stickersTitle,
         ...props
     }: PhotoEditorProps) {
+        let mulptipleStickers = false;
         if (stickers === undefined) {
             stickers = this.defaultProps.stickers
+        } else {
+            mulptipleStickers = Array.isArray(stickers?.[0]);
         }
         if (hiddenControls === undefined) {
             hiddenControls = this.defaultProps.hiddenControls
@@ -58,9 +58,6 @@ export default class PhotoEditor {
         }
         if (stickersTitle === undefined) {
             stickersTitle = this.defaultProps.stickersTitle
-        }
-        if (mulptipleStickers === undefined) {
-            mulptipleStickers = this.defaultProps.mulptipleStickers
         }
 
         RNPhotoEditor.Edit(
