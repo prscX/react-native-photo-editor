@@ -209,22 +209,21 @@
                     android:src="@drawable/download"
                     android:textColor="#FFFFFF"
                     android:textSize="25sp" />
-
-                
                  <Button
                     android:id="@+id/go_to_next_screen_tv"
-                    android:layout_height="wrap_content"
+                    android:layout_height="38dp"
                     android:layout_width="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:textColor="#FFFFFF"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:background="#31B700"
                     android:padding="10dp"
                     android:bottomRightRadius="10dp"
                     android:bottomLeftRadius="10dp"
                     android:topLeftRadius="10dp"
                     android:topRightRadius="10dp"
+                    android:textAllCaps="false"
                     android:text="@string/upload"/>
 
             </RelativeLayout>
