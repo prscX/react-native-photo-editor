@@ -65,7 +65,7 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void Edit(final ReadableMap props, final Callback onDone, final Callback onCancel) {
     String path = props.getString("path");
-
+    String color = props.getString("themeColor");
     //Process Stickers
     ReadableArray stickers = props.getArray("stickers");
     ArrayList<Integer> stickersIntent = new ArrayList<Integer>();
@@ -98,6 +98,7 @@ public class RNPhotoEditorModule extends ReactContextBaseJavaModule {
     intent.putExtra("colorPickerColors", colorPickerColors);
     intent.putExtra("hiddenControls", hiddenControlsIntent);
     intent.putExtra("stickers", stickersIntent);
+    intent.putExtra("color", color);
 
 
     mCancelCallback = onCancel;
