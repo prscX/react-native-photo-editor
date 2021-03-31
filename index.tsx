@@ -1,13 +1,13 @@
-import { NativeModules } from 'react-native'
+import { NativeModules } from 'react-native';
 
 const { RNPhotoEditor } = NativeModules
 
 export interface PhotoEditorProps {
     path: string
+    themeColor:string;
     colors?: string[]
     stickers?: string[]
     hiddenControls?: ('text' | 'clear' | 'draw' | 'save' | 'share' | 'sticker' | 'crop')[]
-
     onDone?: (imagePath: string) => void
     onCancel?: (resultCode: number) => void
 }
