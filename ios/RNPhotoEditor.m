@@ -91,7 +91,10 @@ RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBl
         }
 
         photoEditor.colors = passColors;
-
+        
+        // Set themecolor
+        NSString *color = [props objectForKey: @"themeColor"];
+        photoEditor.themeColor = color;
         // Invoke Editor
         photoEditor.photoEditorDelegate = self;
 
