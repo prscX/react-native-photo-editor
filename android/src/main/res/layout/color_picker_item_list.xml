@@ -9,7 +9,7 @@
         android:layout_height="30dp"
         android:layout_alignParentTop="true"
         android:layout_marginStart="6dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginBottom="10dp"
         android:background="@color/white" />
 
 </RelativeLayout>

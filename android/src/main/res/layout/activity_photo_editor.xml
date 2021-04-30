@@ -60,26 +60,8 @@
                 android:shadowColor="#000000"
                 android:shadowDx="1"
                 android:shadowDy="1"
-                android:shadowRadius="2"
+                android:shadowRadius="10"
                 android:text="@string/done"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/erase_drawing_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_toStartOf="@+id/done_drawing_tv"
-                android:padding="10dp"
-                android:shadowColor="#000000"
-                android:shadowDx="1"
-                android:shadowDy="1"
-                android:shadowRadius="2"
-                android:text="@string/erase"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:visibility="gone" />
@@ -108,23 +90,23 @@
 
                 <ImageView
                     android:id="@+id/close_tv"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:scaleType="fitXY"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="10dp"
                     android:src="@drawable/close"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp" />
 
                 <ImageView
                     android:id="@+id/add_text_tv"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="40dp"
+                    android:layout_height="35dp"
                     android:scaleType="fitXY"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
                     android:src="@drawable/text"
@@ -133,12 +115,12 @@
 
                 <ImageView
                     android:id="@+id/add_pencil_tv"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:scaleType="fitXY"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
                     android:layout_toStartOf="@+id/add_text_tv"
                     android:src="@drawable/edit"
                     android:textColor="#FFFFFF"
@@ -146,29 +128,33 @@
 
                 <ImageView
                     android:id="@+id/add_crop_tv"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:scaleType="fitXY"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
                     android:layout_toStartOf="@+id/add_pencil_tv"
                     android:src="@drawable/crop"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp" />
 
-                <ImageView
+                <TextView
                     android:id="@+id/clear_all_tv"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
                     android:scaleType="fitXY"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:shadowColor="#000000"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="10"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
                     android:layout_toStartOf="@+id/add_crop_tv"
-                    android:src="@drawable/undo"
+                    android:text="@string/clear"
                     android:textColor="#FFFFFF"
-                    android:textSize="20sp" />    
+                    android:textSize="17sp" />    
 
                 <TextView
                     android:id="@+id/add_image_emoji_tv"
@@ -199,8 +185,8 @@
 
                 <ImageView
                     android:id="@+id/save_tv"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:scaleType="fitXY"
                     android:layout_alignEnd="@+id/save_text_tv"
                     android:layout_alignParentStart="true"
@@ -245,7 +231,7 @@
                     android:padding="10dp"
                     android:text="@string/ic_delete"
                     android:textColor="#FFFFFF"
-                    android:textSize="30sp" />
+                    android:textSize="20sp" />
 
             </RelativeLayout>
 
