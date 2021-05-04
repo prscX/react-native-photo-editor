@@ -82,7 +82,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private final String TAG = "PhotoEditorActivity";
     private RelativeLayout parentImageRelativeLayout;
     private RecyclerView drawingViewColorPickerRecyclerView;
-    private TextView undoTextView, undoTextTextView, doneDrawingTextView;
+    private TextView undoTextView, undoTextTextView, doneDrawingTextView, eraseDrawingTextView;
     private SlidingUpPanelLayout mLayout;
     private View topShadow;
     private RelativeLayout topShadowRelativeLayout;
@@ -96,9 +96,9 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
     // CROP OPTION
     private boolean cropperCircleOverlay = false;
-    private boolean freeStyleCropEnabled = true;
+    private boolean freeStyleCropEnabled = false;
     private boolean showCropGuidelines = true;
-    private boolean hideBottomControls = true;
+    private boolean hideBottomControls = false;
 
     private ImageView photoEditImageView;
 
@@ -151,7 +151,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         ImageView addCropTextView = (ImageView) findViewById(R.id.add_crop_tv);
         ImageView saveTextView = (ImageView) findViewById(R.id.save_tv);
         doneDrawingTextView = (TextView) findViewById(R.id.done_drawing_tv);
-        TextView clearAllTextView = (TextView) findViewById(R.id.clear_all_tv);
+        eraseDrawingTextView = (TextView) findViewById(R.id.erase_drawing_tv);
+        ImageView clearAllTextView = (ImageView) findViewById(R.id.clear_all_tv);
         Button goToNextTextView = (Button) findViewById(R.id.go_to_next_screen_tv);
         goToNextTextView.setBackgroundColor(Color.parseColor(color));
         photoEditImageView = (ImageView) findViewById(R.id.photo_edit_iv);
@@ -226,6 +227,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         addPencil.setOnClickListener(this);
         saveTextView.setOnClickListener(this);
         doneDrawingTextView.setOnClickListener(this);
+        eraseDrawingTextView.setOnClickListener(this);
         clearAllTextView.setOnClickListener(this);
         goToNextTextView.setOnClickListener(this);
 
@@ -322,12 +324,10 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void openAddTextPopupWindow(String text, int colorCode) {
-        updateView(View.GONE);
         colorCodeTextView = colorCode;
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View addTextPopupWindowRootView = inflater.inflate(R.layout.add_text_popup_window, null);
         final EditText addTextEditText = (EditText) addTextPopupWindowRootView.findViewById(R.id.add_text_edit_text);
-        addTextEditText.requestFocus();
         TextView addTextDoneTextView = (TextView) addTextPopupWindowRootView.findViewById(R.id.add_text_done_tv);
         RecyclerView addTextColorPickerRecyclerView = (RecyclerView) addTextPopupWindowRootView.findViewById(R.id.add_text_color_picker_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(PhotoEditorActivity.this, LinearLayoutManager.HORIZONTAL, false);
@@ -362,7 +362,6 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 pop.dismiss();
-                updateView(View.VISIBLE);
             }
         });
     }
@@ -380,6 +379,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             updateView(View.GONE);
             drawingViewColorPickerRecyclerView.setVisibility(View.VISIBLE);
             doneDrawingTextView.setVisibility(View.VISIBLE);
+            eraseDrawingTextView.setVisibility(View.VISIBLE);
             LinearLayoutManager layoutManager = new LinearLayoutManager(PhotoEditorActivity.this, LinearLayoutManager.HORIZONTAL, false);
             drawingViewColorPickerRecyclerView.setLayoutManager(layoutManager);
             drawingViewColorPickerRecyclerView.setHasFixedSize(true);
@@ -395,6 +395,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             updateView(View.VISIBLE);
             drawingViewColorPickerRecyclerView.setVisibility(View.GONE);
             doneDrawingTextView.setVisibility(View.GONE);
+            eraseDrawingTextView.setVisibility(View.GONE);
         }
     }
 
@@ -578,6 +579,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             returnBackWithSavedImage();
         } else if (v.getId() == R.id.clear_all_tv) {
             clearAllViews();
+        } else if (v.getId() == R.id.erase_drawing_tv) {
+            eraseDrawing();
         } else if (v.getId() == R.id.go_to_next_screen_tv) {
             returnBackWithUpdateImage();
         }
