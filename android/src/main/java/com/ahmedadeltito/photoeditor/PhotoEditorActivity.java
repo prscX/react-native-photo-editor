@@ -146,7 +146,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         ImageView addTextView = (ImageView) findViewById(R.id.add_text_tv);
         ImageView addPencil = (ImageView) findViewById(R.id.add_pencil_tv);
         RelativeLayout deleteRelativeLayout = (RelativeLayout) findViewById(R.id.delete_rl);
-        TextView deleteTextView = (TextView) findViewById(R.id.delete_tv);
+        ImageView deleteTextView = (ImageView) findViewById(R.id.delete_tv);
         TextView addImageEmojiTextView = (TextView) findViewById(R.id.add_image_emoji_tv);
         ImageView addCropTextView = (ImageView) findViewById(R.id.add_crop_tv);
         ImageView saveTextView = (ImageView) findViewById(R.id.save_tv);
@@ -167,7 +167,6 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         photoEditImageView.setImageBitmap(rotatedBitmap);
 
         addImageEmojiTextView.setTypeface(newFont);
-        deleteTextView.setTypeface(newFont);
 
         final List<Fragment> fragmentsList = new ArrayList<>();
 
