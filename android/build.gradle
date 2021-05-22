@@ -11,7 +11,7 @@ buildscript {
     if (project == rootProject) {
         repositories {
             google()
-            jcenter()
+            mavenCentral()
             maven { url 'https://www.jitpack.io' }
         }
 
