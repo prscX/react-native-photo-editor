@@ -26,7 +26,8 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
     private LayoutInflater inflater;
     private List<Integer> colorPickerColors;
     private OnColorPickerClickListener onColorPickerClickListener;
-    int selectedIndex = 0;
+    private int selectedIndex = 0;
+
     public ColorPickerAdapter(@NonNull Context context, @NonNull List<Integer> colorPickerColors) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
@@ -41,7 +42,7 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        buildColorPickerView(holder.colorPickerView, colorPickerColors.get(position),position);
+        buildColorPickerView(holder.colorPickerView, colorPickerColors.get(position), position);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
         return colorPickerColors.size();
     }
 
-    private void buildColorPickerView(View view, int colorCode,int position) {
+    private void buildColorPickerView(View view, int colorCode, int position) {
         view.setVisibility(View.VISIBLE);
         ShapeDrawable biggerCircle = new ShapeDrawable(new OvalShape());
         biggerCircle.setIntrinsicHeight(32);
@@ -91,7 +92,7 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
                     selectedIndex = getAdapterPosition();
                     if (onColorPickerClickListener != null)
                         onColorPickerClickListener.onColorPickerClickListener(colorPickerColors.get(getAdapterPosition()));
-                    notifyDataSetChanged();
+                        notifyDataSetChanged();
                 }
             });
         }
