@@ -37,6 +37,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -101,6 +102,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private boolean hideBottomControls = true;
 
     private ImageView photoEditImageView;
+    private BrushDrawingView brushDrawingView;
 
 
     @Override
@@ -139,7 +141,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
         emojiFont = getFontFromRes(R.raw.emojioneandroid);
 
-        BrushDrawingView brushDrawingView = (BrushDrawingView) findViewById(R.id.drawing_view);
+         brushDrawingView = (BrushDrawingView) findViewById(R.id.drawing_view);
         drawingViewColorPickerRecyclerView = (RecyclerView) findViewById(R.id.drawing_view_color_picker_recycler_view);
         parentImageRelativeLayout = (RelativeLayout) findViewById(R.id.parent_image_rl);
         ImageView closeTextView = (ImageView) findViewById(R.id.close_tv);
@@ -163,7 +165,18 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
         ViewPager pager = (ViewPager) findViewById(R.id.image_emoji_view_pager);
         PageIndicator indicator = (PageIndicator) findViewById(R.id.image_emoji_indicator);
-
+        
+        // Changing width of an imageview to maintain aspect ratio 
+        // and to fix image perfectly in parent relative layout
+        int width = rotatedBitmap.getWidth();
+        int height = rotatedBitmap.getHeight();
+        if(width > height){
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+            );
+            photoEditImageView.setLayoutParams(params);
+        }
         photoEditImageView.setImageBitmap(rotatedBitmap);
 
         addImageEmojiTextView.setTypeface(newFont);
@@ -367,9 +380,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void updateView(int visibility) {
-        topShadow.setVisibility(visibility);
         topShadowRelativeLayout.setVisibility(visibility);
-        bottomShadow.setVisibility(visibility);
         bottomShadowRelativeLayout.setVisibility(visibility);
     }
 
@@ -480,8 +491,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 String imageName = "/IMG_" + timeStamp + ".jpg";
 
-                 String selectedImagePath = getIntent().getExtras().getString("selectedImagePath");
-                 File file = new File(selectedImagePath);
+                String selectedImagePath = getIntent().getExtras().getString("selectedImagePath");
+                File file = new File(selectedImagePath);
 //                String newPath = getCacheDir() + imageName;
 //	            File file = new File(newPath);
 
