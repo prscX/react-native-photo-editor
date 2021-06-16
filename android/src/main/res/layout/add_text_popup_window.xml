@@ -33,7 +33,8 @@
         android:layout_below="@+id/add_text_done_tv"
         android:background="@null"
         android:gravity="center"
-        android:inputType="textMultiLine"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine|textVisiblePassword|textNoSuggestions"
         android:textSize="40sp" />
 
     <RelativeLayout

@@ -107,192 +107,196 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo_editor);
-
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
-        selectedImagePath = getIntent().getExtras().getString("selectedImagePath");
-        String color = getIntent().getExtras().getString("color");
-        if (selectedImagePath.contains("content://")) {
-            selectedImagePath = getPath(Uri.parse(selectedImagePath));
-        }
-        Log.d("PhotoEditorSDK", "Selected image path: " + selectedImagePath);
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 1;
-        Bitmap bitmap = BitmapFactory.decodeFile(selectedImagePath, options);
-
-        Bitmap rotatedBitmap;
         try {
-            ExifInterface exif = new ExifInterface(selectedImagePath);
-            imageOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-            rotatedBitmap = rotateBitmap(bitmap, imageOrientation, false);
-        } catch (IOException e) {
-            rotatedBitmap = bitmap;
-            imageOrientation = ExifInterface.ORIENTATION_NORMAL;
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_photo_editor);
 
-            e.printStackTrace();
-        }
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
+            selectedImagePath = getIntent().getExtras().getString("selectedImagePath");
+            String color = getIntent().getExtras().getString("color");
+            if (selectedImagePath.contains("content://")) {
+                selectedImagePath = getPath(Uri.parse(selectedImagePath));
+            }
+            Log.d("PhotoEditorSDK", "Selected image path: " + selectedImagePath);
 
-        Typeface newFont = getFontFromRes(R.raw.eventtusicons);
-        Typeface fontAwesome = getFontFromRes(R.raw.font_awesome_solid);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 1;
+            Bitmap bitmap = BitmapFactory.decodeFile(selectedImagePath, options);
 
-        emojiFont = getFontFromRes(R.raw.emojioneandroid);
+            Bitmap rotatedBitmap;
+            try {
+                ExifInterface exif = new ExifInterface(selectedImagePath);
+                imageOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+                rotatedBitmap = rotateBitmap(bitmap, imageOrientation, false);
+            } catch (IOException e) {
+                rotatedBitmap = bitmap;
+                imageOrientation = ExifInterface.ORIENTATION_NORMAL;
 
-         brushDrawingView = (BrushDrawingView) findViewById(R.id.drawing_view);
-        drawingViewColorPickerRecyclerView = (RecyclerView) findViewById(R.id.drawing_view_color_picker_recycler_view);
-        parentImageRelativeLayout = (RelativeLayout) findViewById(R.id.parent_image_rl);
-        ImageView closeTextView = (ImageView) findViewById(R.id.close_tv);
-        ImageView addTextView = (ImageView) findViewById(R.id.add_text_tv);
-        ImageView addPencil = (ImageView) findViewById(R.id.add_pencil_tv);
-        RelativeLayout deleteRelativeLayout = (RelativeLayout) findViewById(R.id.delete_rl);
-        ImageView deleteTextView = (ImageView) findViewById(R.id.delete_tv);
-        TextView addImageEmojiTextView = (TextView) findViewById(R.id.add_image_emoji_tv);
-        ImageView addCropTextView = (ImageView) findViewById(R.id.add_crop_tv);
-        ImageView saveTextView = (ImageView) findViewById(R.id.save_tv);
-        doneDrawingTextView = (TextView) findViewById(R.id.done_drawing_tv);
-        TextView clearAllTextView = (TextView) findViewById(R.id.clear_all_tv);
-        Button goToNextTextView = (Button) findViewById(R.id.go_to_next_screen_tv);
-        goToNextTextView.setBackgroundColor(Color.parseColor(color));
-        photoEditImageView = (ImageView) findViewById(R.id.photo_edit_iv);
-        mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        topShadow = findViewById(R.id.top_shadow);
-        topShadowRelativeLayout = (RelativeLayout) findViewById(R.id.top_parent_rl);
-        bottomShadow = findViewById(R.id.bottom_shadow);
-        bottomShadowRelativeLayout = (RelativeLayout) findViewById(R.id.bottom_parent_rl);
-
-        ViewPager pager = (ViewPager) findViewById(R.id.image_emoji_view_pager);
-        PageIndicator indicator = (PageIndicator) findViewById(R.id.image_emoji_indicator);
-        
-        // Changing width of an imageview to maintain aspect ratio 
-        // and to fix image perfectly in parent relative layout
-        int width = rotatedBitmap.getWidth();
-        int height = rotatedBitmap.getHeight();
-        if(width > height){
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            );
-            photoEditImageView.setLayoutParams(params);
-        }
-        photoEditImageView.setImageBitmap(rotatedBitmap);
-
-        addImageEmojiTextView.setTypeface(newFont);
-
-        final List<Fragment> fragmentsList = new ArrayList<>();
-
-        ImageFragment imageFragment = new ImageFragment();
-        ArrayList stickers = (ArrayList<Integer>) getIntent().getExtras().getSerializable("stickers");
-        if (stickers != null && stickers.size() > 0) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("stickers", stickers);
-
-            imageFragment.setArguments(bundle);
-        }
-
-        fragmentsList.add(imageFragment);
-
-        EmojiFragment emojiFragment = new EmojiFragment();
-        fragmentsList.add(emojiFragment);
-
-        PreviewSlidePagerAdapter adapter = new PreviewSlidePagerAdapter(getSupportFragmentManager(), fragmentsList);
-        pager.setAdapter(adapter);
-        pager.setOffscreenPageLimit(5);
-        indicator.setViewPager(pager);
-
-        photoEditorSDK = new PhotoEditorSDK.PhotoEditorSDKBuilder(PhotoEditorActivity.this)
-                .parentView(parentImageRelativeLayout) // add parent image view
-                .childView(photoEditImageView) // add the desired image view
-                .deleteView(deleteRelativeLayout) // add the deleted view that will appear during the movement of the views
-                .brushDrawingView(brushDrawingView) // add the brush drawing view that is responsible for drawing on the image view
-                .buildPhotoEditorSDK(); // build photo editor sdk
-        photoEditorSDK.setOnPhotoEditorSDKListener(this);
-
-        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                e.printStackTrace();
             }
 
-            @Override
-            public void onPageSelected(int position) {
-                if (position == 0)
-                    mLayout.setScrollableView(((ImageFragment) fragmentsList.get(position)).imageRecyclerView);
-                else if (position == 1)
-                    mLayout.setScrollableView(((EmojiFragment) fragmentsList.get(position)).emojiRecyclerView);
+
+            Typeface newFont = getFontFromRes(R.raw.eventtusicons);
+            Typeface fontAwesome = getFontFromRes(R.raw.font_awesome_solid);
+
+            emojiFont = getFontFromRes(R.raw.emojioneandroid);
+
+            brushDrawingView = (BrushDrawingView) findViewById(R.id.drawing_view);
+            drawingViewColorPickerRecyclerView = (RecyclerView) findViewById(R.id.drawing_view_color_picker_recycler_view);
+            parentImageRelativeLayout = (RelativeLayout) findViewById(R.id.parent_image_rl);
+            ImageView closeTextView = (ImageView) findViewById(R.id.close_tv);
+            ImageView addTextView = (ImageView) findViewById(R.id.add_text_tv);
+            ImageView addPencil = (ImageView) findViewById(R.id.add_pencil_tv);
+            RelativeLayout deleteRelativeLayout = (RelativeLayout) findViewById(R.id.delete_rl);
+            ImageView deleteTextView = (ImageView) findViewById(R.id.delete_tv);
+            TextView addImageEmojiTextView = (TextView) findViewById(R.id.add_image_emoji_tv);
+            ImageView addCropTextView = (ImageView) findViewById(R.id.add_crop_tv);
+            ImageView saveTextView = (ImageView) findViewById(R.id.save_tv);
+            doneDrawingTextView = (TextView) findViewById(R.id.done_drawing_tv);
+            TextView clearAllTextView = (TextView) findViewById(R.id.clear_all_tv);
+            Button goToNextTextView = (Button) findViewById(R.id.go_to_next_screen_tv);
+            goToNextTextView.setBackgroundColor(Color.parseColor(color));
+            photoEditImageView = (ImageView) findViewById(R.id.photo_edit_iv);
+            mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+            topShadow = findViewById(R.id.top_shadow);
+            topShadowRelativeLayout = (RelativeLayout) findViewById(R.id.top_parent_rl);
+            bottomShadow = findViewById(R.id.bottom_shadow);
+            bottomShadowRelativeLayout = (RelativeLayout) findViewById(R.id.bottom_parent_rl);
+
+            ViewPager pager = (ViewPager) findViewById(R.id.image_emoji_view_pager);
+            PageIndicator indicator = (PageIndicator) findViewById(R.id.image_emoji_indicator);
+
+            // Changing width of an imageview to maintain aspect ratio
+            // and to fix image perfectly in parent relative layout
+            int width = rotatedBitmap.getWidth();
+            int height = rotatedBitmap.getHeight();
+            if (width > height) {
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT
+                );
+                photoEditImageView.setLayoutParams(params);
+            }
+            photoEditImageView.setImageBitmap(rotatedBitmap);
+
+            addImageEmojiTextView.setTypeface(newFont);
+
+            final List<Fragment> fragmentsList = new ArrayList<>();
+
+            ImageFragment imageFragment = new ImageFragment();
+            ArrayList stickers = (ArrayList<Integer>) getIntent().getExtras().getSerializable("stickers");
+            if (stickers != null && stickers.size() > 0) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("stickers", stickers);
+
+                imageFragment.setArguments(bundle);
             }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+            fragmentsList.add(imageFragment);
 
+            EmojiFragment emojiFragment = new EmojiFragment();
+            fragmentsList.add(emojiFragment);
+
+            PreviewSlidePagerAdapter adapter = new PreviewSlidePagerAdapter(getSupportFragmentManager(), fragmentsList);
+            pager.setAdapter(adapter);
+            pager.setOffscreenPageLimit(5);
+            indicator.setViewPager(pager);
+
+            photoEditorSDK = new PhotoEditorSDK.PhotoEditorSDKBuilder(PhotoEditorActivity.this)
+                    .parentView(parentImageRelativeLayout) // add parent image view
+                    .childView(photoEditImageView) // add the desired image view
+                    .deleteView(deleteRelativeLayout) // add the deleted view that will appear during the movement of the views
+                    .brushDrawingView(brushDrawingView) // add the brush drawing view that is responsible for drawing on the image view
+                    .buildPhotoEditorSDK(); // build photo editor sdk
+            photoEditorSDK.setOnPhotoEditorSDKListener(this);
+
+            pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    if (position == 0)
+                        mLayout.setScrollableView(((ImageFragment) fragmentsList.get(position)).imageRecyclerView);
+                    else if (position == 1)
+                        mLayout.setScrollableView(((EmojiFragment) fragmentsList.get(position)).emojiRecyclerView);
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+
+            closeTextView.setOnClickListener(this);
+            addImageEmojiTextView.setOnClickListener(this);
+            addCropTextView.setOnClickListener(this);
+            addTextView.setOnClickListener(this);
+            addPencil.setOnClickListener(this);
+            saveTextView.setOnClickListener(this);
+            doneDrawingTextView.setOnClickListener(this);
+            clearAllTextView.setOnClickListener(this);
+            goToNextTextView.setOnClickListener(this);
+
+            ArrayList<Integer> intentColors = (ArrayList<Integer>) getIntent().getExtras().getSerializable("colorPickerColors");
+
+            colorPickerColors = new ArrayList<>();
+            if (intentColors != null) {
+                colorPickerColors = intentColors;
+            } else {
+                colorPickerColors.add(getResources().getColor(R.color.black));
+                colorPickerColors.add(getResources().getColor(R.color.blue_color_picker));
+                colorPickerColors.add(getResources().getColor(R.color.brown_color_picker));
+                colorPickerColors.add(getResources().getColor(R.color.green_color_picker));
+                colorPickerColors.add(getResources().getColor(R.color.orange_color_picker));
+                colorPickerColors.add(getResources().getColor(R.color.red_color_picker));
+                colorPickerColors.add(getResources().getColor(R.color.red_orange_color_picker));
+                colorPickerColors.add(getResources().getColor(R.color.sky_blue_color_picker));
+                colorPickerColors.add(getResources().getColor(R.color.violet_color_picker));
+                colorPickerColors.add(getResources().getColor(R.color.white));
+                colorPickerColors.add(getResources().getColor(R.color.yellow_color_picker));
+                colorPickerColors.add(getResources().getColor(R.color.yellow_green_color_picker));
             }
-        });
-
-        closeTextView.setOnClickListener(this);
-        addImageEmojiTextView.setOnClickListener(this);
-        addCropTextView.setOnClickListener(this);
-        addTextView.setOnClickListener(this);
-        addPencil.setOnClickListener(this);
-        saveTextView.setOnClickListener(this);
-        doneDrawingTextView.setOnClickListener(this);
-        clearAllTextView.setOnClickListener(this);
-        goToNextTextView.setOnClickListener(this);
-
-        ArrayList<Integer> intentColors = (ArrayList<Integer>) getIntent().getExtras().getSerializable("colorPickerColors");
-
-        colorPickerColors = new ArrayList<>();
-        if (intentColors != null) {
-            colorPickerColors = intentColors;
-        } else {
-            colorPickerColors.add(getResources().getColor(R.color.black));
-            colorPickerColors.add(getResources().getColor(R.color.blue_color_picker));
-            colorPickerColors.add(getResources().getColor(R.color.brown_color_picker));
-            colorPickerColors.add(getResources().getColor(R.color.green_color_picker));
-            colorPickerColors.add(getResources().getColor(R.color.orange_color_picker));
-            colorPickerColors.add(getResources().getColor(R.color.red_color_picker));
-            colorPickerColors.add(getResources().getColor(R.color.red_orange_color_picker));
-            colorPickerColors.add(getResources().getColor(R.color.sky_blue_color_picker));
-            colorPickerColors.add(getResources().getColor(R.color.violet_color_picker));
-            colorPickerColors.add(getResources().getColor(R.color.white));
-            colorPickerColors.add(getResources().getColor(R.color.yellow_color_picker));
-            colorPickerColors.add(getResources().getColor(R.color.yellow_green_color_picker));
-        }
 
 
-        new CountDownTimer(500, 100) {
+            new CountDownTimer(500, 100) {
 
-            public void onTick(long millisUntilFinished) {
+                public void onTick(long millisUntilFinished) {
+                }
+
+                public void onFinish() {
+                    mLayout.setScrollableView(((ImageFragment) fragmentsList.get(0)).imageRecyclerView);
+                }
+
+            }.start();
+
+            ArrayList hiddenControls = (ArrayList<Integer>) getIntent().getExtras().getSerializable("hiddenControls");
+            for (int i = 0; i < hiddenControls.size(); i++) {
+                if (hiddenControls.get(i).toString().equalsIgnoreCase("text")) {
+                    addTextView.setVisibility(View.INVISIBLE);
+                }
+                if (hiddenControls.get(i).toString().equalsIgnoreCase("clear")) {
+                    clearAllTextView.setVisibility(View.INVISIBLE);
+                }
+                if (hiddenControls.get(i).toString().equalsIgnoreCase("draw")) {
+                    addPencil.setVisibility(View.INVISIBLE);
+                }
+                if (hiddenControls.get(i).toString().equalsIgnoreCase("save")) {
+                    saveTextView.setVisibility(View.INVISIBLE);
+                }
+                if (hiddenControls.get(i).toString().equalsIgnoreCase("sticker")) {
+                    addImageEmojiTextView.setVisibility(View.INVISIBLE);
+                }
+                if (hiddenControls.get(i).toString().equalsIgnoreCase("crop")) {
+                    addCropTextView.setVisibility(View.INVISIBLE);
+                }
             }
-
-            public void onFinish() {
-                mLayout.setScrollableView(((ImageFragment) fragmentsList.get(0)).imageRecyclerView);
-            }
-
-        }.start();
-
-        ArrayList hiddenControls = (ArrayList<Integer>) getIntent().getExtras().getSerializable("hiddenControls");
-        for (int i = 0;i < hiddenControls.size();i++) {
-            if (hiddenControls.get(i).toString().equalsIgnoreCase("text")) {
-                addTextView.setVisibility(View.INVISIBLE);
-            }
-            if (hiddenControls.get(i).toString().equalsIgnoreCase("clear")) {
-                clearAllTextView.setVisibility(View.INVISIBLE);
-            }
-            if (hiddenControls.get(i).toString().equalsIgnoreCase("draw")) {
-                addPencil.setVisibility(View.INVISIBLE);
-            }
-            if (hiddenControls.get(i).toString().equalsIgnoreCase("save")) {
-                saveTextView.setVisibility(View.INVISIBLE);
-            }
-            if (hiddenControls.get(i).toString().equalsIgnoreCase("sticker")) {
-                addImageEmojiTextView.setVisibility(View.INVISIBLE);
-            }
-            if (hiddenControls.get(i).toString().equalsIgnoreCase("crop")) {
-                addCropTextView.setVisibility(View.INVISIBLE);
-            }
+        }catch (Exception ex){
+            ex.printStackTrace();
         }
     }
 
@@ -334,49 +338,54 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void openAddTextPopupWindow(String text, int colorCode) {
-        updateView(View.GONE);
-        colorCodeTextView = colorCode;
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View addTextPopupWindowRootView = inflater.inflate(R.layout.add_text_popup_window, null);
-        final EditText addTextEditText = (EditText) addTextPopupWindowRootView.findViewById(R.id.add_text_edit_text);
-        addTextEditText.requestFocus();
-        TextView addTextDoneTextView = (TextView) addTextPopupWindowRootView.findViewById(R.id.add_text_done_tv);
-        RecyclerView addTextColorPickerRecyclerView = (RecyclerView) addTextPopupWindowRootView.findViewById(R.id.add_text_color_picker_recycler_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(PhotoEditorActivity.this, LinearLayoutManager.HORIZONTAL, false);
-        addTextColorPickerRecyclerView.setLayoutManager(layoutManager);
-        addTextColorPickerRecyclerView.setHasFixedSize(true);
-        ColorPickerAdapter colorPickerAdapter = new ColorPickerAdapter(PhotoEditorActivity.this, colorPickerColors);
-        colorPickerAdapter.setOnColorPickerClickListener(new ColorPickerAdapter.OnColorPickerClickListener() {
-            @Override
-            public void onColorPickerClickListener(int colorCode) {
-                addTextEditText.setTextColor(colorCode);
-                colorCodeTextView = colorCode;
+        try{
+            updateView(View.GONE);
+            colorCodeTextView = colorCode;
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View addTextPopupWindowRootView = inflater.inflate(R.layout.add_text_popup_window, null);
+            final EditText addTextEditText = (EditText) addTextPopupWindowRootView.findViewById(R.id.add_text_edit_text);
+            addTextEditText.requestFocus();
+            TextView addTextDoneTextView = (TextView) addTextPopupWindowRootView.findViewById(R.id.add_text_done_tv);
+            RecyclerView addTextColorPickerRecyclerView = (RecyclerView) addTextPopupWindowRootView.findViewById(R.id.add_text_color_picker_recycler_view);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(PhotoEditorActivity.this, LinearLayoutManager.HORIZONTAL, false);
+            addTextColorPickerRecyclerView.setLayoutManager(layoutManager);
+            addTextColorPickerRecyclerView.setHasFixedSize(true);
+            ColorPickerAdapter colorPickerAdapter = new ColorPickerAdapter(PhotoEditorActivity.this, colorPickerColors);
+            colorPickerAdapter.setOnColorPickerClickListener(new ColorPickerAdapter.OnColorPickerClickListener() {
+                @Override
+                public void onColorPickerClickListener(int colorCode) {
+                    addTextEditText.setTextColor(colorCode);
+                    colorCodeTextView = colorCode;
+                }
+            });
+            addTextColorPickerRecyclerView.setAdapter(colorPickerAdapter);
+            if (stringIsNotEmpty(text)) {
+                addTextEditText.setText(text);
+                addTextEditText.setTextColor(colorCode == -1 ? getResources().getColor(R.color.white) : colorCode);
             }
-        });
-        addTextColorPickerRecyclerView.setAdapter(colorPickerAdapter);
-        if (stringIsNotEmpty(text)) {
-            addTextEditText.setText(text);
-            addTextEditText.setTextColor(colorCode == -1 ? getResources().getColor(R.color.white) : colorCode);
+            final PopupWindow pop = new PopupWindow(PhotoEditorActivity.this);
+            pop.setContentView(addTextPopupWindowRootView);
+            pop.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+            pop.setHeight(LinearLayout.LayoutParams.MATCH_PARENT);
+            pop.setFocusable(true);
+            pop.setBackgroundDrawable(null);
+            pop.showAtLocation(addTextPopupWindowRootView, Gravity.TOP, 0, 0);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            addTextDoneTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    addText(addTextEditText.getText().toString(), colorCodeTextView);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    pop.dismiss();
+                    updateView(View.VISIBLE);
+                }
+            });
+        }catch (Exception ex){
+            ex.printStackTrace();
         }
-        final PopupWindow pop = new PopupWindow(PhotoEditorActivity.this);
-        pop.setContentView(addTextPopupWindowRootView);
-        pop.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
-        pop.setHeight(LinearLayout.LayoutParams.MATCH_PARENT);
-        pop.setFocusable(true);
-        pop.setBackgroundDrawable(null);
-        pop.showAtLocation(addTextPopupWindowRootView, Gravity.TOP, 0, 0);
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        addTextDoneTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addText(addTextEditText.getText().toString(), colorCodeTextView);
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                pop.dismiss();
-                updateView(View.VISIBLE);
-            }
-        });
+
     }
 
     private void updateView(int visibility) {
