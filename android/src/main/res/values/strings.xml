@@ -26,5 +26,5 @@
     <string name="ic_crop">&#xf565;</string>
     <string name="choose_from_gallery">Choose From Gallery</string>
     <string name="choose_from_camera">Choose From Camera</string>
-    <string name="undo">Undo</string>
+    <string name="upload">Upload</string>
 </resources>
