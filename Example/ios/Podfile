@@ -12,7 +12,6 @@ target 'Example' do
     :hermes_enabled => false
   )
 
-
   use_frameworks! :linkage => :static
 
   pod 'iOSPhotoEditor', :git => 'https://github.com/prscX/photo-editor', :branch => 'master'
