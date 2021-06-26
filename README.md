@@ -33,9 +33,7 @@ This library is a React Native bridge around native photo editor libraries. It a
 
 `$ yarn add react-native-photo-editor`
 
-## **RN61 >= RNPE V1 >**
-
-> RN60 above please use `react-native-photo-editor` V1 and above
+> This library is supported React Native V61 and above
 
 - **iOS**
 
@@ -128,86 +126,6 @@ allprojects {
 - To save image to the public external storage, you must request the WRITE_EXTERNAL_STORAGE permission in your manifest file:
 
 `<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />`
-
-
-## **RN61 < RNPE V1 <**
-
-> RN60 below please use `react-native-photo-editor` V.0.*
-
-`$ react-native link react-native-photo-editor`
-
-* Android
-  * Please add below script in your build.gradle
-
-```
-buildscript {
-    repositories {
-        jcenter()
-        maven { url "https://maven.google.com" }
-        maven { url "https://jitpack.io" }
-        ...
-    }
-}
-
-allprojects {
-    repositories {
-        mavenLocal()
-        jcenter()
-        maven { url "https://maven.google.com" }
-        maven { url "https://jitpack.io" }
-        ...
-    }
-}
-```
-
-  * Please add below script in your app/build.gradle
-
-```
-
-android {
-    ...
-
-    defaultConfig {
-        ...
-        renderscriptSupportModeEnabled true
-    }
-}
-```
-
-- Add below activity in your app activites:
-
-`
-<activity android:name="com.ahmedadeltito.photoeditor.PhotoEditorActivity" />
-<activity android:name="com.yalantis.ucrop.UCropActivity" />
-`
-
-- To save image to the public external storage, you must request the WRITE_EXTERNAL_STORAGE permission in your manifest file:
-
-`<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />`
-
-> **Note:** Android SDK 27 > is supported
-
-* iOS
-    > **iOS Prerequisite:** Please make sure CocoaPods is installed on your system
-
-  * After `react-native link react-native-photo-editor`, please verify `node_modules/react-native-photo-editor/ios/` contains `Pods` folder. If does not exist please execute `pod install` command on `node_modules/react-native-photo-editor/ios/`, if any error => try `pod repo update` then `pod install`
-  * After verification, open your project and create a folder 'RNPhotoEditor' under Libraries.
-  * Drag `node_modules/react-native-photo-editor/ios/pods/Pods.xcodeproject` into RNPhotoEditor, as well as the RNPhotoEditor.xcodeproject if it does not exist.
-  * Add the `iOSPhotoEditor.framework` into your project's `Embedded Binaries` and make sure the framework is also in linked libraries.
-  * Go to your project's `Build Settings -> Frameworks Search Path` and add `${BUILT_PRODUCTS_DIR}/iOSPhotoEditor` non-recursive.
-  * Add below property to your info.list
-
-```
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Application needs permission to write photos...</string>
-
-	<!-- If you are targeting devices running on iOS 10 or later, you'll also need to add: -->
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>iOS 10 needs permission to write photos...</string>
-```
-
-  * Now build your iOS app through Xcode
-
 
 ## ⛄️ Stickers
 
