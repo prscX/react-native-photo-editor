@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import ui.photoeditor.R;
@@ -22,17 +23,24 @@ import ui.photoeditor.R;
 public class ImageFragment extends Fragment implements ImageAdapter.OnImageClickListener {
 
     private ArrayList<Bitmap> stickerBitmaps;
+    private String stickersTitle;
     private PhotoEditorActivity photoEditorActivity;
     RecyclerView imageRecyclerView;
+    TextView stickersTitleText;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         photoEditorActivity = (PhotoEditorActivity) getActivity();
+        final Bundle bdl = getArguments();
+
 
         TypedArray images = getResources().obtainTypedArray(R.array.photo_editor_photos);
+        Boolean mulptipleStickers = getActivity().getIntent().getExtras().getBoolean("mulptipleStickers");
 
-        ArrayList<Integer> stickers = (ArrayList<Integer>) getActivity().getIntent().getExtras().getSerializable("stickers");
+        ArrayList<Integer> stickers = bdl.getIntegerArrayList("stickers");
+        String title = bdl.getString("stickersTitle");
+        stickersTitle = title;
 
         if (stickers != null && stickers.size() > 0) {
             stickerBitmaps = new ArrayList<>();
@@ -54,10 +62,13 @@ public class ImageFragment extends Fragment implements ImageAdapter.OnImageClick
         View rootView = inflater.inflate(R.layout.fragment_main_photo_edit_image, container, false);
 
         imageRecyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_main_photo_edit_image_rv);
+        stickersTitleText = (TextView) rootView.findViewById(R.id.stickersTitleText);
         imageRecyclerView.setLayoutManager(new GridLayoutManager(photoEditorActivity, 3));
         ImageAdapter adapter = new ImageAdapter(photoEditorActivity, stickerBitmaps);
         adapter.setOnImageClickListener(this);
         imageRecyclerView.setAdapter(adapter);
+        if(stickersTitle != null)
+            stickersTitleText.setText(stickersTitle);
 
         return rootView;
     }
