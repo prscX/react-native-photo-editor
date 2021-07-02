@@ -95,13 +95,12 @@ RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBl
         // Invoke Editor
         photoEditor.photoEditorDelegate = self;
 	
-	// The default modal presenting is page sheet in ios 13, not full screen
-	if (@available(iOS 13, *)) {
+	    // The default modal presenting is page sheet in ios 13, not full screen
+	    if (@available(iOS 13, *)) {
             [photoEditor setModalPresentationStyle: UIModalPresentationFullScreen];
         }
 
-        id<UIApplicationDelegate> app = [[UIApplication sharedApplication] delegate];
-        UINavigationController *rootViewController = ((UINavigationController*) app.window.rootViewController);
+        UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
 
         if (rootViewController.presentedViewController) {
             [rootViewController.presentedViewController presentViewController:photoEditor animated:YES completion:nil];
