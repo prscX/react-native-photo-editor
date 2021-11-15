@@ -11,12 +11,12 @@ buildscript {
     if (project == rootProject) {
         repositories {
             google()
-            jcenter()
+            mavenCentral()
             maven { url 'https://www.jitpack.io' }
         }
 
         dependencies {
-            classpath("com.android.tools.build:gradle:3.5.3")
+        classpath('com.android.tools.build:gradle:4.2.1')
         }
     }
 }
