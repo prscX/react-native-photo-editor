@@ -44,7 +44,7 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.github.prscX:photo-editor-android:master-SNAPSHOT'
+    implementation 'com.github.prscX:photo-editor-android:master'
     implementation 'fr.avianey.com.viewpagerindicator:library:2.4.1@aar'
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.android.support:design:28.0.0'
