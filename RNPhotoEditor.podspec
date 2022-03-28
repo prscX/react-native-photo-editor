@@ -1,6 +1,6 @@
 require 'json'
 
-package = JSON.parse(File.read(File.join(__dir__, '../package.json')))
+package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 Pod::Spec.new do |s|
   s.name                   = 'RNPhotoEditor'
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target  = '8.0'
 
   s.preserve_paths         = 'LICENSE', 'package.json'
-  s.source_files           = '**/*.{h,m}'
+  s.source_files           = 'ios/**/*.{h,m}'
   s.dependency             'React'
   s.dependency             'iOSPhotoEditor'
 end
