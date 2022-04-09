@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,6 +58,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -434,7 +436,10 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
                     if (isSDCARDMounted()) {
                         String folderName = "PhotoEditorSDK";
-                        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), folderName);
+                        // String folderDirectory = Environment.DIRECTORY_PICTURES;
+                        // Use Downloads Directory as I'm having issue in Pictures due to Android 11 Storage Update
+                        String folderDirectory = Environment.DIRECTORY_DOWNLOADS;
+                        File mediaStorageDir = new File(String.valueOf(Environment.getExternalStoragePublicDirectory(folderDirectory)));
                         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
                             Log.d("PhotoEditorSDK", "Failed to create directory");
                         }
@@ -442,10 +447,14 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                         String selectedOutputPath = mediaStorageDir.getPath() + File.separator + imageName;
                         returnIntent.putExtra("imagePath", selectedOutputPath);
                         Log.d("PhotoEditorSDK", "selected camera path " + selectedOutputPath);
-                        File file = new File(selectedOutputPath);
+                        ContentValues values = new ContentValues();
+                        values.put(MediaStore.MediaColumns.DISPLAY_NAME, imageName);
+                        values.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+                        values.put(MediaStore.MediaColumns.RELATIVE_PATH, folderDirectory);
+                        Uri uri = getContentResolver().insert(MediaStore.Files.getContentUri("external"), values);
 
                         try {
-                            FileOutputStream out = new FileOutputStream(file);
+                            OutputStream out = getContentResolver().openOutputStream(uri);
                             if (parentImageRelativeLayout != null) {
                                 parentImageRelativeLayout.setDrawingCacheEnabled(true);
 
@@ -458,6 +467,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                             out.close();
 
                             try {
+                                File file = new File(selectedOutputPath);
                                 ExifInterface exifDest = new ExifInterface(file.getAbsolutePath());
                                 exifDest.setAttribute(ExifInterface.TAG_ORIENTATION, Integer.toString(imageOrientation));
                                 exifDest.saveAttributes();
