@@ -67,11 +67,7 @@ RCT_EXPORT_METHOD(Edit:(nonnull NSDictionary *)props onDone:(RCTResponseSenderBl
         NSMutableArray *imageStickers = [[NSMutableArray alloc] initWithCapacity:stickers.count];
 
         for (NSString *sticker in stickers) {
-            NSString *stickerFile = [sticker stringByAppendingString:@".png"];
-            UIImage *image = [UIImage imageNamed: stickerFile];
-            if(image){
-                [imageStickers addObject: image];
-            }
+            [imageStickers addObject: [UIImage imageNamed: sticker]];
         }
 
         photoEditor.stickers = imageStickers;
