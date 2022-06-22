@@ -1,6 +1,6 @@
 {
     "name": "react-native-photo-editor",
-    "version": "0.0.7",
+    "version": "0.0.6",
     "description": "React Native: Native Photo Editor",
     "main": "RNPhotoEditor.js",
     "repository": {
@@ -19,7 +19,7 @@
         "pod-installer": "0.0.0"
     },
     "devDependencies": {
-        "prettier-pack": "0.0.8"
+        "prettier-pack": "0.0.7"
     },
     "license": "Apache License 2.0"
 }
