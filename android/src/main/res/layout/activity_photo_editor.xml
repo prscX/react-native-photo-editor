@@ -84,11 +84,11 @@
                 android:textSize="20sp"
                 android:visibility="gone" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/drawing_view_color_picker_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true" />
+          <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/drawing_view_color_picker_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
 
             <View
                 android:id="@+id/top_shadow"
@@ -199,19 +199,19 @@
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/clear_all_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignEnd="@+id/clear_all_text_tv"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_toEndOf="@+id/save_tv"
-                    android:gravity="center"
-                    android:text="@string/ic_clear_all"
-                    android:textColor="#FFFFFF"
-                    android:textSize="25sp" />
+              <TextView
+                android:id="@+id/clear_all_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/clear_all_text_tv"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@+id/save_tv"
+                android:gravity="center"
+                android:text="@string/ic_clear_all"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
 
                 <TextView
                     android:id="@+id/clear_all_text_tv"
@@ -236,7 +236,7 @@
                     android:layout_marginTop="4dp"
                     android:layout_toEndOf="@+id/clear_all_tv"
                     android:gravity="center"
-                    android:text="@string/ic_clear_all"
+                    android:text="@string/ic_undo"
                     android:textColor="#FFFFFF"
                     android:textSize="25sp"
                     android:visibility="gone" />

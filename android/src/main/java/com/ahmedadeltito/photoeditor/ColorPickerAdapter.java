@@ -9,6 +9,8 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,76 +24,93 @@ import ui.photoeditor.R;
 
 public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.ViewHolder> {
 
-    private Context context;
-    private LayoutInflater inflater;
-    private List<Integer> colorPickerColors;
-    private OnColorPickerClickListener onColorPickerClickListener;
+  private Context context;
+  private LayoutInflater inflater;
+  private List<Integer> colorPickerColors;
+  private OnColorPickerClickListener onColorPickerClickListener;
+  private int pos;
 
-    public ColorPickerAdapter(@NonNull Context context, @NonNull List<Integer> colorPickerColors) {
-        this.context = context;
-        this.inflater = LayoutInflater.from(context);
-        this.colorPickerColors = colorPickerColors;
+  public ColorPickerAdapter(@NonNull Context context, @NonNull List<Integer> colorPickerColors, int initColorCode) {
+    this.context = context;
+    this.inflater = LayoutInflater.from(context);
+    this.colorPickerColors = colorPickerColors;
+    int position = colorPickerColors.indexOf(initColorCode);
+    this.pos = position == -1 ? 5 : position; // 5 equals index of red item
+  }
+
+  @Override
+  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    View view = inflater.inflate(R.layout.color_picker_item_list, parent, false);
+    return new ViewHolder(view);
+  }
+
+  @Override
+  public void onBindViewHolder(ViewHolder holder, int position) {
+    buildColorPickerView(holder.colorPickerView, colorPickerColors.get(position), position);
+  }
+
+  @Override
+  public int getItemCount() {
+    return colorPickerColors.size();
+  }
+
+  private void buildColorPickerView(View view, int colorCode, int position) {
+    view.setVisibility(View.VISIBLE);
+    int w = 70;
+    if (pos == position){
+      w = 120;
     }
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.color_picker_item_list, parent, false);
-        return new ViewHolder(view);
-    }
+    ShapeDrawable biggerCircle = new ShapeDrawable(new OvalShape());
+    biggerCircle.setIntrinsicHeight(20);
+    biggerCircle.setIntrinsicWidth(20);
+    biggerCircle.setBounds(new Rect(0, 0, 20, 20));
+    biggerCircle.getPaint().setColor(colorCode);
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        buildColorPickerView(holder.colorPickerView, colorPickerColors.get(position));
-    }
+    ShapeDrawable smallerCircle = new ShapeDrawable(new OvalShape());
+    smallerCircle.setIntrinsicHeight(5);
+    smallerCircle.setIntrinsicWidth(5);
+    smallerCircle.setBounds(new Rect(0, 0, 5, 5));
+    smallerCircle.getPaint().setColor(Color.WHITE);
+    smallerCircle.setPadding(10, 10, 10, 10);
+    Drawable[] drawables = {smallerCircle, biggerCircle};
 
-    @Override
-    public int getItemCount() {
-        return colorPickerColors.size();
-    }
+    LayerDrawable layerDrawable = new LayerDrawable(drawables);
 
-    private void buildColorPickerView(View view, int colorCode) {
-        view.setVisibility(View.VISIBLE);
+    view.setBackground(layerDrawable);
+    ViewGroup.LayoutParams params = view.getLayoutParams();
+    params.width = w;
+    params.height = w;
+    view.setLayoutParams(params);
+  }
 
-        ShapeDrawable biggerCircle = new ShapeDrawable(new OvalShape());
-        biggerCircle.setIntrinsicHeight(20);
-        biggerCircle.setIntrinsicWidth(20);
-        biggerCircle.setBounds(new Rect(0, 0, 20, 20));
-        biggerCircle.getPaint().setColor(colorCode);
+  public void setOnColorPickerClickListener(OnColorPickerClickListener onColorPickerClickListener) {
+    this.onColorPickerClickListener = onColorPickerClickListener;
+  }
 
-        ShapeDrawable smallerCircle = new ShapeDrawable(new OvalShape());
-        smallerCircle.setIntrinsicHeight(5);
-        smallerCircle.setIntrinsicWidth(5);
-        smallerCircle.setBounds(new Rect(0, 0, 5, 5));
-        smallerCircle.getPaint().setColor(Color.WHITE);
-        smallerCircle.setPadding(10, 10, 10, 10);
-        Drawable[] drawables = {smallerCircle, biggerCircle};
+  class ViewHolder extends RecyclerView.ViewHolder {
+    View colorPickerView;
 
-        LayerDrawable layerDrawable = new LayerDrawable(drawables);
+    public ViewHolder(View itemView) {
+      super(itemView);
+      colorPickerView = itemView.findViewById(R.id.color_picker_view);
+      itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          if (onColorPickerClickListener != null) {
+            int code = colorPickerColors.get(getAdapterPosition());
+            pos = getAdapterPosition();
+            onColorPickerClickListener.onColorPickerClickListener(code, pos);
+            notifyDataSetChanged();
+          }
 
-        view.setBackgroundDrawable(layerDrawable);
-    }
-
-    public void setOnColorPickerClickListener(OnColorPickerClickListener onColorPickerClickListener) {
-        this.onColorPickerClickListener = onColorPickerClickListener;
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-        View colorPickerView;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            colorPickerView = itemView.findViewById(R.id.color_picker_view);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onColorPickerClickListener != null)
-                        onColorPickerClickListener.onColorPickerClickListener(colorPickerColors.get(getAdapterPosition()));
-                }
-            });
         }
-    }
+      });
 
-    public interface OnColorPickerClickListener {
-        void onColorPickerClickListener(int colorCode);
     }
+  }
+
+  public interface OnColorPickerClickListener {
+    void onColorPickerClickListener(int colorCode, int position);
+  }
 }
