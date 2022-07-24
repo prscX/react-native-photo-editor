@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.homepage               = package['homepage']
   s.license                = package['license']
   s.author                 = package['author']
-  s.source                 = { :git => 'https://github.com/prscX/react-native-photo-editor.git', :tag => s.version }
+  s.source                 = { :git => 'https://github.com/Kegmil/react-native-photo-editor.git', :tag => s.version }
 
   s.platform               = :ios, '9.0'
   s.ios.deployment_target  = '8.0'
